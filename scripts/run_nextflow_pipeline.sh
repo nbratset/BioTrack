@@ -15,7 +15,7 @@ dt=$(date '+%d/%m/%Y %H:%M:%S');
 echo "$dt"
 
 
-path_to_venv=$HOME/projects/CSCI6118/
+path_to_venv=$HOME/projects/CSCI6118/micromamba/envs/
 source ~/.bashrc
 # micromamba activate nextflow_env   <--- tried this and it didn't work
 micromamba activate ${path_to_venv}nextflow_env
