@@ -1,5 +1,5 @@
 #!/bin/bash 
-#SBATCH --job-name=nextflow_bashrc # Job name
+#SBATCH --job-name=nextflow_run # Job name
 #SBATCH --mail-type=ALL # Mail events (NONE, BEGIN, END, FAIL, ALL)
 #SBATCH --mail-user=natalie.bratset@colorado.edu # Where to send mail
 #SBATCH --nodes=1 # Run on a single node
