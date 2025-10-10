@@ -1,5 +1,5 @@
 #!/bin/bash 
-#SBATCH --job-name=nextflow_test # Job name
+#SBATCH --job-name=nextflow_bashrc # Job name
 #SBATCH --mail-type=ALL # Mail events (NONE, BEGIN, END, FAIL, ALL)
 #SBATCH --mail-user=natalie.bratset@colorado.edu # Where to send mail
 #SBATCH --nodes=1 # Run on a single node
@@ -16,6 +16,7 @@ echo "$dt"
 
 
 path_to_venv=$HOME/projects/CSCI6118/
+source ~/.bashrc
 # micromamba activate nextflow_env   <--- tried this and it didn't work
 micromamba activate ${path_to_venv}nextflow_env
 
