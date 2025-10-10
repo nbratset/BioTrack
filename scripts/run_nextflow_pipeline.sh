@@ -25,7 +25,7 @@ echo $indir
 
 # --- Execution ---
 # nextflow help
-nextflow run nf-core/taxprofiler -r 1.1.0 -profile conda \
+micromamba run -n nextflow run nf-core/taxprofiler -r 1.1.0 -profile conda \
   --input ${indir}samplesheet.csv \
   --databases ${indir}database.csv \
   --outdir ${indir}nextflow_results \
