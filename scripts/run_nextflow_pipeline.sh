@@ -1,5 +1,5 @@
 #!/bin/bash 
-#SBATCH --job-name=nextflow_config3 # Job name
+#SBATCH --job-name=nextflow_config8 # Job name
 #SBATCH --mail-type=ALL # Mail events (NONE, BEGIN, END, FAIL, ALL)
 #SBATCH --mail-user=natalie.bratset@colorado.edu # Where to send mail
 #SBATCH --nodes=1 # Run on a single node
@@ -14,17 +14,19 @@
 dt=$(date '+%d/%m/%Y %H:%M:%S');
 echo "$dt"
 
+module purge
+module load openjdk/21.0.1
 
-# path_to_venv=$HOME/projects/CSCI6118/micromamba/envs/
+path_to_venv=$HOME/projects/CSCI6118/micromamba/envs/
 
 source ~/.bashrc
-# micromamba activate ${path_to_venv}nextflow_env
+micromamba activate ${path_to_venv}nextflow_env
 
 indir=/scratch/Shares/biotracker_csci6118/
 echo $indir
 
 # --- Execution ---
-nextflow run nf-core/taxprofiler -r 1.1.0 -profile mamba \
+nextflow run nf-core/taxprofiler -r 1.1.0 \
   --input ${indir}samplesheet.csv \
   --databases ${indir}database.csv \
   --outdir ${indir}nextflow_results \
