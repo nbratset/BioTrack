@@ -1,2 +1,2 @@
 tool,db_name,db_params,db_path
-metaphlan,db1,,/scratch/Shares/biotracker_csci6118/micromamba/envs/nextflow_env/bin/metaphlan
+metaphlan,mpa_v31_CHOCOPhlAn_201901,,/scratch/Shares/biotracker_csci6118/metaphlan_db_v3/
