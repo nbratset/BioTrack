@@ -1,3 +1,2 @@
-Sample,Condition
-SRR5946641,Normal
-SRR5946640,Disease
+Sample,Location,Condition
+SRR5946632,USA,Patient
