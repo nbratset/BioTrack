@@ -42,9 +42,31 @@ Describe how to install all development dependencies and how to run an automated
 make install
 npm test
 ``` -->
+## Report Generation Python Environment Setup
+### 1. Install [micromamba](https://mamba.readthedocs.io/en/latest/installation/micromamba-installation.html)
+This will depend heavily on your system. For our HPC, we used the following command:
+```sh
+curl micro.mamba.pm/install.sh | bash
+```
 
+### 2. Create a virtual environment (for report generation)
+```sh
+micromamba create -n biotrack_report_env python=3.11
+```
 
-## Python Environment Setup (For Nextflow Alignment Pipeline)
+```sh
+micromamba activate biotrack_report_env
+```
+
+### 3. Install dependancies
+```sh
+micromamba install numpy
+micromamba install pandas
+micromamba install matplotlib
+micromamba install dominate
+```
+
+## Nextflow Alignment Pipeline Python Environment Setup
 ### 1. Install [micromamba](https://mamba.readthedocs.io/en/latest/installation/micromamba-installation.html)
 This will depend heavily on your system. For our HPC, we used the following command:
 ```sh
@@ -85,9 +107,9 @@ micromamba install -c conda-forge -c bioconda multiqc
     * Work in progress
 
 # Creators
-Arya Gautam – [Linkedin](https://www.linkedin.com/in/arya-gautam-a9a125204/) – YourEmail@example.com
+Arya Gautam – [Linkedin](https://www.linkedin.com/in/arya-gautam-a9a125204/) – [CU Profile](https://www.colorado.edu/certificate/iqbiology/natalie-marie-bratset)
 
-Natalie Bratset – [Linkedin](https://www.linkedin.com/in/nbratset/) – YourEmail@example.com
+Natalie Bratset – [Linkedin](https://www.linkedin.com/in/nbratset/) – [CU Profile](https://www.colorado.edu/certificate/iqbiology/arya-gautam)
 
 Distributed under the AGPL-3.0 license. See ``LICENSE`` for more information.
 
