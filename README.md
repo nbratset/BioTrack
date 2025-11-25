@@ -39,7 +39,7 @@ You now provide your output from the R script as input arguments to the analysis
 
 To run it on your terminal:
 
-python run_pipeline.py \
+python src/run_pipeline.py \
     --location Netherlands \
     --otu_file input_data/otu.csv \
     --metadata_file input_data/combined_metadata.csv

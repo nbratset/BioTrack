@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 def barplot_taxa_facet_fill(
-    otu_table, taxonomy_series, metadata, level="Genus", top_n=10, out_file=None
+    otu_table, taxonomy_series, metadata, level="Genus", top_n=10, out_file=None, fig_width=25, height_per_condition=6
 ):
     """
     Creates stacked normalized barplots of top N taxa by condition,
@@ -49,7 +49,7 @@ def barplot_taxa_facet_fill(
         # Prepare figure
     conditions = pivot_df.index.get_level_values('Condition').unique()
     nconds = len(conditions)
-    fig, axes = plt.subplots(nconds, 1, figsize=(22, 4*nconds), sharey=True)
+    fig, axes = plt.subplots(nconds, 1, figsize=(fig_width, height_per_condition*nconds), sharey=True)
     axes = [axes] if nconds == 1 else axes
 
     # Plot loop; sort by globally most abundant genus
@@ -64,15 +64,15 @@ def barplot_taxa_facet_fill(
             ax.bar(cond_df_sorted.index, values, bottom=bottom, label=taxa, color=color_palette[idx], width=1)
             bottom = values if bottom is None else bottom + values
 
-        ax.set_title(f"Condition = {condition}", fontsize=15)
+        ax.set_title(f"Condition = {condition}", fontsize=13)
         ax.set_ylabel("Proportion")
         ax.set_xlabel("Sample")
         ax.set_xticklabels([])  # disables x-axis tick labels
         ax.grid(axis='x', linestyle='', linewidth=0)
         if i == nconds - 1:
-            ax.legend(loc='upper right', bbox_to_anchor=(1.1,1), fontsize=12)
+            ax.legend(loc='upper right', bbox_to_anchor=(1.1,1), fontsize=11)
 
-    fig.suptitle(f"Top {top_n} {level}-Level Taxa by Condition", fontsize=18)
+    fig.suptitle(f"Top {top_n} {level}-Level Taxa by Condition", fontsize=17)
     plt.tight_layout()
     plt.subplots_adjust(top=0.92)
 

@@ -27,7 +27,12 @@ tax = pd.read_csv("input_data/tax.csv", index_col=0)
 #Save results
 OUTDIR = "results"
 os.makedirs(OUTDIR, exist_ok=True)
-            
+
+#QC filtering
+min_abundance = 0.001
+min_samples = 5
+otu =  otu.loc[:, (otu > min_abundance).sum(axis=0) >= min_samples] 
+
 # Visualization of top 10 species
 taxonomy_series = tax.apply(lambda row: ";".join(row.values.astype(str)), axis=1)
 taxonomy_series.index = tax.index
@@ -81,6 +86,53 @@ plt.tight_layout()
 plt.savefig(f"{OUTDIR}/pcoa_plot.png", dpi=300)
 plt.close()
 
+
+plt.figure(figsize=(12,8))
+sns.boxplot(
+    x="PC1",
+    y="Condition",
+    data=coords,
+    palette="tab10"
+)
+plt.xlabel(f"PCoA1 ({var_exp[0]*100:.1f}%)")
+plt.title("PCoA1 Boxplot (Bray-Curtis)")
+handles, labels = plt.gca().get_legend_handles_labels()
+by_label = dict(zip(labels, handles))
+plt.tight_layout()
+plt.savefig(f"{OUTDIR}/pcoa1_boxplot.png", dpi=300)
+plt.close()
+
+
+plt.figure(figsize=(12,8))
+sns.boxplot(
+    x="PC2",
+    y="Condition",
+    data=coords,
+    palette="tab10"
+)
+plt.xlabel(f"PCoA2 ({var_exp[1]*100:.1f}%)")
+plt.title("PCoA2 Boxplot (Bray-Curtis)")
+handles, labels = plt.gca().get_legend_handles_labels()
+by_label = dict(zip(labels, handles))
+plt.tight_layout()
+plt.savefig(f"{OUTDIR}/pcoa2_boxplot.png", dpi=300)
+plt.close()
+
+
+plt.figure(figsize=(12,8))
+sns.boxplot(
+    x="PC3",
+    y="Condition",
+    data=coords,
+    palette="tab10"
+)
+plt.xlabel(f"PCoA3 ({var_exp[2]*100:.1f}%)")
+plt.title("PCoA3 Boxplot (Bray-Curtis)")
+handles, labels = plt.gca().get_legend_handles_labels()
+by_label = dict(zip(labels, handles))
+plt.tight_layout()
+plt.savefig(f"{OUTDIR}/pcoa3_boxplot.png", dpi=300)
+plt.close()
 
 #Alpha diversity
 alpha_df = compute_alpha(otu)
@@ -171,14 +223,14 @@ auc_fig, confusion_mat, patient_preds = run_rf_multiclass(
 )
 
 #Differential abundance
-metadata = metadata[metadata["Condition"] != "Patient"]
-metadata.loc[metadata["Condition"] == "Ulcerative colitis", "Condition"] = "Disease"
-metadata.loc[metadata["Condition"] == "Crohn's disease", "Condition"] = "Disease"
-group = metadata["Condition"]
-otu_clean = otu.loc[metadata.index]
-otu_clean = otu_clean + 1e-6
+metadata_daa = metadata[metadata["Condition"] != "Patient"]
+metadata_daa.loc[metadata_daa["Condition"] == "Ulcerative colitis", "Condition"] = "Disease"
+metadata_daa.loc[metadata_daa["Condition"] == "Crohn's disease", "Condition"] = "Disease"
+group = metadata_daa["Condition"]
+otu_daa = otu.loc[metadata_daa.index]
+otu_daa = otu_daa + 1e-6
 
-ancom_df, percentile_df = ancom(otu_clean, group)
+ancom_df, percentile_df = ancom(otu_daa, group)
 sig_taxa = ancom_df[ancom_df['Signif']].index
 medians= percentile_df[50.0].loc[sig_taxa]
 medians['Diff'] = medians['Healthy control'] - medians['Disease']
@@ -196,4 +248,19 @@ plt.xticks(rotation=45, ha='right')
 plt.tight_layout()
 plt.savefig(f"{OUTDIR}/differential_abundance.png", dpi=300)
 plt.close()
+
+#Visualizing patient species profile
+patient = metadata[metadata["Condition"] == "Patient"]
+otu_patient = otu.loc[patient.index]
+
+barplot_taxa_facet_fill(
+    otu_table=otu_patient,
+    taxonomy_series=taxonomy_series,
+    metadata=patient,
+    level="Species",
+    top_n=10,
+    fig_width=12,
+    height_per_condition=10,
+    out_file=f"{OUTDIR}/top10_taxa_patient.png"
+)
 
