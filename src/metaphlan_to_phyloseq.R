@@ -18,7 +18,6 @@ args <- commandArgs(trailingOnly = TRUE)
 if (length(args) < 2) {
   stop("Usage: Rscript metaphlan_to_phyloseq.R <metaphlan_file> <metadata_file>\n")
 }
-
 metaphlan_file <- args[1]
 metadata_file  <- args[2]
 
@@ -82,8 +81,10 @@ ps <- readRDS("input_data/phyloseq.ref.rds")
 ps.cln <- merge_phyloseq(phyloseqin,ps)
 tax <- as.data.frame(tax_table(ps.cln))
 otu <- as.data.frame(otu_table(ps.cln))
+sampledf <- as(sample_data(ps.cln), "data.frame")
 
 #Save new phyloseq: reference+patient
 saveRDS(ps.cln,"input_data/phyloseq.rds")
 write.csv(tax,"input_data/tax.csv")
 write.csv(otu,"input_data/otu.csv")
+write.csv(sampledf, "input_data/combined_metadata.csv")

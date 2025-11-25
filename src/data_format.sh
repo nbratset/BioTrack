@@ -17,4 +17,4 @@ if ! conda env list | grep -q "metaphlan_analysis"; then
 fi
 
 conda activate metaphlan_analysis
-Rscript src/metaphlan_to_phyloseq.R
+  
