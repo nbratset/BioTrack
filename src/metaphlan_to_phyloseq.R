@@ -15,11 +15,15 @@ library(openxlsx)
 args <- commandArgs(trailingOnly = TRUE)
 
 #Error handling: Stop if two inputs are not provided
-if (length(args) < 2) {
-  stop("Usage: Rscript metaphlan_to_phyloseq.R <metaphlan_file> <metadata_file>\n")
+if (length(args) < 5) {
+  stop("Usage: Rscript metaphlan_to_phyloseq.R <metaphlan_file> <metadata_file> <tax_out> <otu_out> <meta_out>\n")
 }
+
 metaphlan_file <- args[1]
 metadata_file  <- args[2]
+tax_out        <- args[3]
+otu_out        <- args[4]
+meta_out       <- args[5]
 
 #Define a function that converts metaphlan output to a phyloseq object
 metaphlanToPhyloseq <- function(tax, metadat=NULL, simplenames=TRUE, roundtointeger=FALSE, split="|") {
@@ -84,7 +88,6 @@ otu <- as.data.frame(otu_table(ps.cln))
 sampledf <- as(sample_data(ps.cln), "data.frame")
 
 #Save new phyloseq: reference+patient
-saveRDS(ps.cln,"input_data/phyloseq.rds")
-write.csv(tax,"input_data/tax.csv")
-write.csv(otu,"input_data/otu.csv")
-write.csv(sampledf, "input_data/combined_metadata.csv")
+write.csv(tax,      tax_out,     row.names = TRUE)
+write.csv(otu,      otu_out,     row.names = TRUE)
+write.csv(sampledf, meta_out,    row.names = TRUE)

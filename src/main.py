@@ -11,16 +11,23 @@ from randomforest import run_rf_multiclass
 import matplotlib.pyplot as plt
 import seaborn as sns
 from skbio.stats.composition import ancom
+import argparse
+
+# --- argparse ---
+parser = argparse.ArgumentParser()
+parser.add_argument("--otu", required=True)
+parser.add_argument("--meta", required=True)
+args = parser.parse_args()
+
+# Load data
+otu = pd.read_csv(args.otu, index_col=0)
+metadata = pd.read_csv(args.meta, index_col=0)
+tax = pd.read_csv("input_data/tax.csv", index_col=0)      
 
 #Save results
 OUTDIR = "results"
 os.makedirs(OUTDIR, exist_ok=True)
             
-# Load data
-otu = pd.read_csv("input_data/otu.csv", index_col=0)      # samples as rows, OTUs as columns
-tax = pd.read_csv("input_data/tax.csv", index_col=0)      # ASV/OTU as index, taxonomy strings as values
-metadata = pd.read_csv("input_data/combined_metadata.csv", index_col=0)
-
 # Visualization of top 10 species
 taxonomy_series = tax.apply(lambda row: ";".join(row.values.astype(str)), axis=1)
 taxonomy_series.index = tax.index
@@ -179,12 +186,12 @@ medians['Diff'] = medians['Healthy control'] - medians['Disease']
 top_diff = medians['Diff'].abs().sort_values(ascending=False).head(20)
 top_taxa = medians.loc[top_diff.index]
 
-plt.figure(figsize=(10, 4))
+plt.figure(figsize=(8, 6))
 plt.bar(top_taxa.index, top_taxa['Diff'])
 plt.axhline(0, color='grey', linewidth=0.8, linestyle='--')
 plt.ylabel('Median Abundance Difference\n(Disease - Healthy control)')
 plt.xlabel('Taxon')
-plt.title('Top 10 Significant Taxa: Median Abundance Difference')
+plt.title('Top 20 Significant Taxa: Median Abundance Difference')
 plt.xticks(rotation=45, ha='right')
 plt.tight_layout()
 plt.savefig(f"{OUTDIR}/differential_abundance.png", dpi=300)
