@@ -122,8 +122,7 @@ We would like to thank CU Boulder's IQ Biology Program, BioFrontiers, and the NS
 
 We would also like to thank CU Boulder's [Biofrontiers IT Team (BIT)](https://bit.colorado.edu/) for allowing us to use their Fiji Computing Cluster, and for many emails and meetings of troubleshooting.
 
-## Disclosure
-This project, code, and reports generates do not provide medical advice. The information generated in the report is intended to be reviewed by a medical professional and cannot independently provide medical diagnoses. Always seek the advice of your physician or medical health provider for an official diagnosis and treatment information.
+DISCLAIMER: This project, code, and reports generated do not provide medical advice. The information generated in the report is intended to be reviewed by a medical professional and cannot independently provide medical diagnoses. Always seek the advice of your physician or medical health provider for an official diagnosis and treatment information.
 
 
 <!-- ## Contributing
