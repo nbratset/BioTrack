@@ -6,29 +6,16 @@ patient_id='John Doe'
 date='11/25/2025'
 
 ###########################################################
+disclaimer='''This report was generated using BioTrack, 
+              an open-source gut microbiome analysis software.
+              DISCLAIMER: This report does not provide medical advice.
+              The information in this report is intended to be
+              reviewed by a medical professional and cannot
+              independently provide medical diagnoses. Always seek
+              the advice of your physician or medical health provider
+              for an official diagnosis and treatment information.'''
+
 app = Dash(__name__, external_stylesheets=[dbc.themes.FLATLY])
-# app.layout = html.Div()
-# app.layout = dbc.Container([html.Div(), html.Div()],
-#                            fluid=True,
-#                            className='report-container')
-# app.layout = dbc.Container([
-#     html.Div(style={
-#         'width': 800,
-#         'margin-left': 0,
-#         'margin-top': 0,
-#         'margin-bottom': 0
-#     }),
-#     html.Div(
-#         style={
-#             'width': 990,
-#             'margin-top': 35,
-#             'margin-right': 35,
-#             'margin-bottom': 35
-#         })
-# ],
-#     fluid=True,
-#     style={'display': 'flex'},
-#     className='report-container')
 
 app.layout = dbc.Container([
                             # Title
@@ -68,13 +55,11 @@ app.layout = dbc.Container([
                                         'margin-top': 0,
                                         'margin-bottom': 0}),
                             # Footer - Disclaimer
-                            html.Div(html.P("BioTrack/Disclaimer"),
+                            html.Div(html.H5(f"{disclaimer}"),
                                     style={
                                         'width': 800,
                                         'height': 50,
-                                        'margin-left': 10,
-                                        'margin-top': 0,
-                                        'margin-bottom': 0})],
+                                        'margin': 0})],
                             fluid=False,
                             style={},
                             className='report-container')
