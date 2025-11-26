@@ -30,13 +30,16 @@ app = Dash(__name__, external_stylesheets=[dbc.themes.FLATLY])
 #     style={'display': 'flex'},
 #     className='report-container')
 
-app.layout = dbc.Container([html.Div(html.H1("Gut Microbiome Report"),
+app.layout = dbc.Container([
+                            # Title
+                            html.Div(html.H1("Gut Microbiome Report"),
                                     style={
                                         'width': 800,
                                         'height': 50,
                                         'margin-left': 0,
                                         'margin-top': 30,
                                         'margin-bottom': 0}),
+                            # Patient name and date
                             html.Div(style={
                                         'width': 800,
                                         'height': 50,
@@ -48,6 +51,7 @@ app.layout = dbc.Container([html.Div(html.H1("Gut Microbiome Report"),
                                         'alignItems': 'center'},
                                     children=[html.P(f"{patient_id}"), 
                                               html.P(f"{date}")]),
+                            # Summary Block
                             html.Div(html.H2("Summary"),
                                     style={
                                         'width': 800,
@@ -55,14 +59,16 @@ app.layout = dbc.Container([html.Div(html.H1("Gut Microbiome Report"),
                                         'margin-left': 10,
                                         'margin-top': 0,
                                         'margin-bottom': 0}),
-                            html.Div(html.H2("Content"), #content
+                            # Content Block Placeholder - for plots
+                            html.Div(html.H2("Content"),
                                     style={
                                         'width': 800,
                                         'height': 700,
                                         'margin-left': 10,
                                         'margin-top': 0,
                                         'margin-bottom': 0}),
-                            html.Div(html.P("BioTrack/Disclaimer"), #content
+                            # Footer - Disclaimer
+                            html.Div(html.P("BioTrack/Disclaimer"),
                                     style={
                                         'width': 800,
                                         'height': 50,
