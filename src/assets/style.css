@@ -1,0 +1,39 @@
+body {
+    background-color: #708090;
+}
+
+.report-container {
+    width: 800px;
+    height: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    background-color: #010103;
+    border: 1px solid #cccccc;
+    border-radius: 10px;
+}
+
+h1 {
+    font-family: "Georgia"; 
+    color: #ffffff; 
+    font-size: 30px;
+    margin: 10px;
+    text-align: center;
+}
+
+h2 {
+    font-family: "Georgia"; 
+    color: #ffffff; 
+    font-size: 25px;
+    margin: 10px;
+    text-align: left;
+}
+
+p {
+    font-family: 'Georgia';
+    color: #ffffff;
+    margin-left: 20;
+    font-size: 20px;
+    text-align: left;
+}
