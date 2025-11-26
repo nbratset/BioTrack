@@ -4,8 +4,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 import pandas as pd
-from dominate import tags as html_tags
-from dominate.util import raw as html_raw
 
 
 def import_files():
