@@ -63,7 +63,9 @@ micromamba activate biotrack_report_env
 micromamba install numpy
 micromamba install pandas
 micromamba install matplotlib
-micromamba install dominate
+micromamba install plotly
+micromamba install dash
+micromamba install dash_bootstrap_components
 ```
 
 ## Nextflow Alignment Pipeline Python Environment Setup
@@ -119,6 +121,9 @@ This software was developed as part of CU Boulder's Software Engineering for Sci
 We would like to thank CU Boulder's IQ Biology Program, BioFrontiers, and the NSF for their support on this project.
 
 We would also like to thank CU Boulder's [Biofrontiers IT Team (BIT)](https://bit.colorado.edu/) for allowing us to use their Fiji Computing Cluster, and for many emails and meetings of troubleshooting.
+
+## Disclosure
+This project, code, and reports generates do not provide medical advice. The information generated in the report is intended to be reviewed by a medical professional and cannot independently provide medical diagnoses. Always seek the advice of your physician or medical health provider for an official diagnosis and treatment information.
 
 
 <!-- ## Contributing
