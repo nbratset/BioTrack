@@ -7,6 +7,7 @@ import pandas as pd
 from dominate import tags as html_tags
 from dominate.util import raw as html_raw
 
+
 def import_files():
     # this function will read in the generated files
     pass

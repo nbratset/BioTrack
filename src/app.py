@@ -1,9 +1,9 @@
 from dash import Dash, html, dcc
 import dash_bootstrap_components as dbc
 
-################### Variables this needs ##################
-patient_id='John Doe'
-date='11/25/2025'
+# Variables
+patient_id = 'John Doe'
+date = '11/25/2025'
 
 ###########################################################
 app = Dash(__name__, external_stylesheets=[dbc.themes.FLATLY])
@@ -33,7 +33,7 @@ app = Dash(__name__, external_stylesheets=[dbc.themes.FLATLY])
 app.layout = dbc.Container([
                             # Title
                             html.Div(html.H1("Gut Microbiome Report"),
-                                    style={
+                                     style={
                                         'width': 800,
                                         'height': 50,
                                         'margin-left': 0,
@@ -49,11 +49,11 @@ app.layout = dbc.Container([
                                         'display': 'flex',
                                         'justifyContent': 'space-around',
                                         'alignItems': 'center'},
-                                    children=[html.P(f"{patient_id}"), 
+                                     children=[html.P(f"{patient_id}"),
                                               html.P(f"{date}")]),
                             # Summary Block
                             html.Div(html.H2("Summary"),
-                                    style={
+                                     style={
                                         'width': 800,
                                         'height': 50,
                                         'margin-left': 10,
@@ -61,7 +61,7 @@ app.layout = dbc.Container([
                                         'margin-bottom': 0}),
                             # Content Block Placeholder - for plots
                             html.Div(html.H2("Content"),
-                                    style={
+                                     style={
                                         'width': 800,
                                         'height': 700,
                                         'margin-left': 10,
@@ -69,7 +69,7 @@ app.layout = dbc.Container([
                                         'margin-bottom': 0}),
                             # Footer - Disclaimer
                             html.Div(html.P("BioTrack/Disclaimer"),
-                                    style={
+                                     style={
                                         'width': 800,
                                         'height': 50,
                                         'margin-left': 10,
