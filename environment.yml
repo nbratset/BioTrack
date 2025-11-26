@@ -1,0 +1,9 @@
+name: biotrack
+channels:
+  - bioconda
+  - conda-forge
+dependencies:
+  - numpy>=1.26.4
+  - pycodestyle>=2.14
+  - matplotlib>=3.10
+  - pandas>=2.3.3
