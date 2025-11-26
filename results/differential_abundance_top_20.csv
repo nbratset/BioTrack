@@ -1,0 +1,21 @@
+,Disease,Healthy control,Diff
+s__Alistipes_putredinis,1e-06,3.3708910000000003,3.37089
+s__Faecalibacterium_prausnitzii,4.174811,5.448121,1.2733100000000004
+s__Eubacterium_rectale,0.215011,0.778891,0.5638799999999999
+s__Odoribacter_splanchnicus,1e-06,0.38576599999999994,0.38576499999999997
+s__Alistipes_finegoldii,1e-06,0.289551,0.28955000000000003
+s__Flavonifractor_plautii,0.28438599999999997,0.073296,-0.21108999999999997
+s__Roseburia_intestinalis,0.013786,0.222906,0.20912
+s__Bacteroides_xylanisolvens,1e-06,0.154601,0.1546
+s__Roseburia_inulinivorans,0.016901,0.159761,0.14286
+s__Roseburia_faecis,0.006961,0.13666099999999998,0.12969999999999998
+s__Oscillibacter_sp_57_20,1e-06,0.124676,0.124675
+s__Roseburia_hominis,1e-06,0.07914099999999999,0.07913999999999999
+s__Fusicatenibacter_saccharivorans,0.038561,0.094761,0.0562
+s__Dorea_longicatena,0.017386,0.056015999999999996,0.03863
+s__Ruminococcus_torques,1e-06,0.033926,0.033925
+s__Firmicutes_bacterium_CAG_83,1e-06,0.029536,0.029535
+s__Firmicutes_bacterium_AF16_15,1e-06,0.018866,0.018865
+s__Dorea_formicigenerans,1e-06,0.016760999999999998,0.016759999999999997
+s__Eubacterium_sp_CAG_38,1e-06,0.013430999999999998,0.01343
+s__Ruminococcus_gnavus,0.012400999999999999,1e-06,-0.0124

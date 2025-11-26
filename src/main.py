@@ -37,10 +37,8 @@ otu =  otu.loc[:, (otu > min_abundance).sum(axis=0) >= min_samples]
 taxonomy_series = tax.apply(lambda row: ";".join(row.values.astype(str)), axis=1)
 taxonomy_series.index = tax.index
 
-otu_clean = otu.drop(columns=["SortKey"], errors="ignore")
-
 barplot_taxa_facet_fill(
-    otu_table=otu_clean,
+    otu_table=otu,
     taxonomy_series=taxonomy_series,
     metadata=metadata,
     level="Genus",
@@ -53,6 +51,7 @@ barplot_taxa_facet_fill(
 beta = compute_beta(otu)
 coords, var_exp = run_pcoa(beta)
 coords = coords.join(metadata[["Condition", "Location"]])
+coords.to_csv(f"{OUTDIR}/beta_diversity_coords.csv")
 
 ##PCoA1 vs PCoA2
 plt.figure(figsize=(15,10))
@@ -237,6 +236,7 @@ medians['Diff'] = medians['Healthy control'] - medians['Disease']
 
 top_diff = medians['Diff'].abs().sort_values(ascending=False).head(20)
 top_taxa = medians.loc[top_diff.index]
+top_taxa.to_csv(f"{OUTDIR}/differential_abundance_top_20.csv")
 
 plt.figure(figsize=(8, 6))
 plt.bar(top_taxa.index, top_taxa['Diff'])
