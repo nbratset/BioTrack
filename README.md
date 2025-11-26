@@ -1,4 +1,4 @@
-![Header](assets/full_logo_colors.png)
+![Header](src/assets/full_logo_colors.png)
 # BioTrack
 > A pipeline for the analysis of patient gut microbiome data with easy-to-read report generation.
 <!-- <img style="float: right;" src="assets/logo_b_background.png"> -->
@@ -116,7 +116,7 @@ Distributed under the AGPL-3.0 license. See ``LICENSE`` for more information.
 This software was developed as part of CU Boulder's Software Engineering for Scientists (CSCI 6118) course.
 
 # Acknowledgements
-We would like to thank CU Boulder's IQ Biology Program, BioFrontiers, and the NSF fortheir support on this project.
+We would like to thank CU Boulder's IQ Biology Program, BioFrontiers, and the NSF for their support on this project.
 
 We would also like to thank CU Boulder's [Biofrontiers IT Team (BIT)](https://bit.colorado.edu/) for allowing us to use their Fiji Computing Cluster, and for many emails and meetings of troubleshooting.
 
