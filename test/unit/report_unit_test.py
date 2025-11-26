@@ -6,6 +6,7 @@ sys.path.append('test/unit/')  # noqa
 
 import report
 
+
 class TestReport(unittest.TestCase):
     def test_args(self):
         self.assertEqual()
