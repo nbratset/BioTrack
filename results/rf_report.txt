@@ -1,0 +1,36 @@
+
+Fitting model on non-patient train samples...
+
+PREDICTING 20% HELD-OUT NON-PATIENT SAMPLES:
+
+Confusion Matrix (non-patient test):
+[[126   3   4]
+ [  8  71   0]
+ [ 13   2  69]]
+
+Classification Report (non-patient test):
+                    precision    recall  f1-score   support
+
+   Crohn's disease       0.86      0.95      0.90       133
+   Healthy control       0.93      0.90      0.92        79
+Ulcerative colitis       0.95      0.82      0.88        84
+
+          accuracy                           0.90       296
+         macro avg       0.91      0.89      0.90       296
+      weighted avg       0.90      0.90      0.90       296
+
+ROC curve saved to results/rf_auc_curve.png
+
+Testing trained model on Patient samples:
+Predictions: ['Healthy control']
+
+Classification Report (patients):
+                 precision    recall  f1-score   support
+
+Healthy control       0.00      0.00      0.00       0.0
+        Patient       0.00      0.00      0.00       1.0
+
+       accuracy                           0.00       1.0
+      macro avg       0.00      0.00      0.00       1.0
+   weighted avg       0.00      0.00      0.00       1.0
+
