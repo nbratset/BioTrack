@@ -50,7 +50,7 @@ app.layout = dbc.Container([
                                         'justifyContent': 'space-around',
                                         'alignItems': 'center'},
                                      children=[html.P(f"{patient_id}"),
-                                              html.P(f"{date}")]),
+                                               html.P(f"{date}")]),
                             # Summary Block
                             html.Div(html.H2("Summary"),
                                      style={
