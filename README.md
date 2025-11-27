@@ -14,21 +14,32 @@ One to two paragraph statement about your product and what it does.
 - generate a report based on this
 
 # Installation
-WIP
-<!-- OS X & Linux:
+**OS X & Linux:**
 
 ```sh
-npm install my-crazy-module --save
+git clone https://github.com/nbratset/BioTrack.git
 ```
 
-Windows:
+**Windows:**
 
 ```sh
-edit autoexec.bat
-``` -->
+git clone https://github.com/nbratset/BioTrack.git
+```
 
+**Alternative:**
+> Download a ZIP of the full repository
+![zip](https://i.sstatic.net/89Oxe.png)
 
 # Usage example
+## Step 1: Nextflow Pipeline for Patient Sample Alignment
+This first step is to take the gut microbiome pateint samples and align them. This pipeline will generate a metaphlan output, which is used in later analysis. 
+
+See `Nextflow Alignment Pipeline Python Environment Setup` below to set up your python virtual environment to run this pipeline.
+
+
+
+
+
 
 A few motivating and useful examples of how your product can be used. Spice this up with code blocks and potentially more screenshots.
 
@@ -42,6 +53,31 @@ Describe how to install all development dependencies and how to run an automated
 make install
 npm test
 ``` -->
+## Nextflow Alignment Pipeline Python Environment Setup
+### 1. Install [micromamba](https://mamba.readthedocs.io/en/latest/installation/micromamba-installation.html)
+This will depend heavily on your system. For our HPC, we used the following command:
+```sh
+curl micro.mamba.pm/install.sh | bash
+```
+
+### 2. Create a nextflow virtual environment (for alignment pipeline)
+```sh
+micromamba create -n nextflow_env -c bioconda -c conda-forge nextflow
+```
+
+```sh
+micromamba activate nextflow_env
+```
+
+### 3. Install dependancies
+```sh
+micromamba install -c conda-forge -c bioconda metaphlan=3.1.0
+micromamba install -c conda-forge -c bioconda fastqc
+micromamba install -c conda-forge -c bioconda fastp
+micromamba install -c conda-forge -c bioconda bowtie2
+micromamba install -c conda-forge -c bioconda multiqc
+```
+
 ## Report Generation Python Environment Setup
 ### 1. Install [micromamba](https://mamba.readthedocs.io/en/latest/installation/micromamba-installation.html)
 This will depend heavily on your system. For our HPC, we used the following command:
@@ -68,30 +104,7 @@ micromamba install dash
 micromamba install dash_bootstrap_components
 ```
 
-## Nextflow Alignment Pipeline Python Environment Setup
-### 1. Install [micromamba](https://mamba.readthedocs.io/en/latest/installation/micromamba-installation.html)
-This will depend heavily on your system. For our HPC, we used the following command:
-```sh
-curl micro.mamba.pm/install.sh | bash
-```
 
-### 2. Create a nextflow virtual environment (for alignment pipeline)
-```sh
-micromamba create -n nextflow_env -c bioconda -c conda-forge nextflow
-```
-
-```sh
-micromamba activate nextflow_env
-```
-
-### 3. Install dependancies
-```sh
-micromamba install -c conda-forge -c bioconda metaphlan=3.1.0
-micromamba install -c conda-forge -c bioconda fastqc
-micromamba install -c conda-forge -c bioconda fastp
-micromamba install -c conda-forge -c bioconda bowtie2
-micromamba install -c conda-forge -c bioconda multiqc
-```
 
 # Release History
 
