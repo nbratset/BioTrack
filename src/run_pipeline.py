@@ -49,7 +49,6 @@ def main():
     except FileNotFoundError as e:
         print('Missing OTU File')
         sys.exit(0)
-
     try:
         metadata = pd.read_csv(args.metadata_file, index_col=0)
     except FileNotFoundError as e:
@@ -63,6 +62,21 @@ def main():
             metadata = metadata.loc[keep_samples]
             otu = otu.loc[keep_samples]
 
+    # Handle Patient ID (ignores if no report)
+    if args.report:
+        if args.patient_id == '':
+            patient = otu[otu["Condition"] == 'Patient'].index.to_list()
+            if len(patient) > 1:
+                print('Check metadata file, multiple patients were found!')
+                sys.exit(0)
+            elif len(patient) == 0:
+                print('Check metadata file, no patients found!')
+                sys.exit(0)
+            elif len(patient) == 1:
+                patient_id = patient[0]
+        else:
+            patient_id = args.patient_id
+
     # Create temporary filtered files
     with tempfile.TemporaryDirectory() as tmpdir:
         tmp_otu_path = os.path.join(tmpdir, "otu_filtered.csv")
@@ -72,15 +86,12 @@ def main():
         metadata.to_csv(tmp_meta_path)
 
         # Call main.py and pass filtered files
-        subprocess.run(
-            [
-                "python",
-                "src/main.py",
-                "--otu", tmp_otu_path,
-                "--meta", tmp_meta_path
-            ],
-            check=True
-        )
+        subprocess.run(["python",
+                        "src/main.py",
+                        "--otu", tmp_otu_path,
+                        "--meta", tmp_meta_path
+                        ],
+                       check=True)
 
 
 if __name__ == "__main__":
