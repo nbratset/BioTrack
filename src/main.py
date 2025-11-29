@@ -1,6 +1,6 @@
 import os
 import sys
-sys.path.append("src")
+sys.path.append("src") # noqa
 
 import numpy as np
 import pandas as pd
@@ -17,6 +17,8 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("--otu", required=True)
 parser.add_argument("--meta", required=True)
+parser.add_argument("-r", "--report", default=False, required=False)
+parser.add_argument("-p", "--pateint_id", type=str, required=False)
 args = parser.parse_args()
 
 # Load data
@@ -34,20 +36,18 @@ min_samples = 5
 otu =  otu.loc[:, (otu > min_abundance).sum(axis=0) >= min_samples] 
 
 # Visualization of top 10 species
-taxonomy_series = tax.apply(lambda row: ";".join(row.values.astype(str)), axis=1)
+taxonomy_series = tax.apply(lambda row: ";".join(row.values.astype(str)),
+                            axis=1)
 taxonomy_series.index = tax.index
 
-barplot_taxa_facet_fill(
-    otu_table=otu,
-    taxonomy_series=taxonomy_series,
-    metadata=metadata,
-    level="Genus",
-    top_n=10,
-    out_file=f"{OUTDIR}/top10_taxa_by_condition.png"
-)
+barplot_taxa_facet_fill(otu_table=otu,
+                        taxonomy_series=taxonomy_series,
+                        metadata=metadata,
+                        level="Genus",
+                        top_n=10,
+                        out_file=f"{OUTDIR}/top10_taxa_by_condition.png")
 
-
-# Beta diversity analysiss
+# Beta diversity analysis
 beta = compute_beta(otu)
 coords, var_exp = run_pcoa(beta)
 coords = coords.join(metadata[["Condition", "Location"]])
@@ -55,28 +55,24 @@ coords.to_csv(f"{OUTDIR}/beta_diversity_coords.csv")
 
 ##PCoA1 vs PCoA2
 plt.figure(figsize=(15,10))
-sns.scatterplot(
-    x="PC1",
-    y="PC2",
-    data=coords[coords["Condition"] != "Patient"],
-    s=100,
-    hue="Condition",
-    alpha=0.7,
-    edgecolor="k",
-    palette="tab10",
-    style="Location",    
-    legend=True
-)
-sns.scatterplot(
-    x="PC1",
-    y="PC2",
-    data=coords[coords["Condition"] == "Patient"],
-    s=150,
-    color="red",
-    marker="X",               
-    edgecolor="k",
-    label="Patient"
-)
+sns.scatterplot(x="PC1",
+                y="PC2",
+                data=coords[coords["Condition"] != "Patient"],
+                s=100,
+                hue="Condition",
+                alpha=0.7,
+                edgecolor="k",
+                palette="tab10",
+                style="Location",
+                legend=True)
+sns.scatterplot(x="PC1",
+                y="PC2",
+                data=coords[coords["Condition"] == "Patient"],
+                s=150,
+                color="red",
+                marker="X",
+                edgecolor="k",
+                label="Patient")
 plt.xlabel(f"PCoA1 ({var_exp[0]*100:.1f}%)")
 plt.ylabel(f"PCoA2 ({var_exp[1]*100:.1f}%)")
 plt.title("PCoA Plot (Bray-Curtis)")
@@ -87,12 +83,10 @@ plt.close()
 
 
 plt.figure(figsize=(12,8))
-sns.boxplot(
-    x="PC1",
-    y="Condition",
-    data=coords,
-    palette="tab10"
-)
+sns.boxplot(x="PC1",
+            y="Condition",
+            data=coords,
+            palette="tab10")
 plt.xlabel(f"PCoA1 ({var_exp[0]*100:.1f}%)")
 plt.title("PCoA1 Boxplot (Bray-Curtis)")
 handles, labels = plt.gca().get_legend_handles_labels()
@@ -103,12 +97,10 @@ plt.close()
 
 
 plt.figure(figsize=(12,8))
-sns.boxplot(
-    x="PC2",
-    y="Condition",
-    data=coords,
-    palette="tab10"
-)
+sns.boxplot(x="PC2",
+            y="Condition",
+            data=coords,
+            palette="tab10")
 plt.xlabel(f"PCoA2 ({var_exp[1]*100:.1f}%)")
 plt.title("PCoA2 Boxplot (Bray-Curtis)")
 handles, labels = plt.gca().get_legend_handles_labels()
@@ -119,12 +111,10 @@ plt.close()
 
 
 plt.figure(figsize=(12,8))
-sns.boxplot(
-    x="PC3",
-    y="Condition",
-    data=coords,
-    palette="tab10"
-)
+sns.boxplot(x="PC3",
+            y="Condition",
+            data=coords,
+            palette="tab10")
 plt.xlabel(f"PCoA3 ({var_exp[2]*100:.1f}%)")
 plt.title("PCoA3 Boxplot (Bray-Curtis)")
 handles, labels = plt.gca().get_legend_handles_labels()

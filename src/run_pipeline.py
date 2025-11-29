@@ -29,7 +29,7 @@ def main():
 
     parser.add_argument('-r',
                         '--report',
-                        type=str,
+                        type=bool,
                         help='Build a report document (optional).',
                         default=False,
                         required=False)
@@ -86,12 +86,22 @@ def main():
         metadata.to_csv(tmp_meta_path)
 
         # Call main.py and pass filtered files
-        subprocess.run(["python",
-                        "src/main.py",
-                        "--otu", tmp_otu_path,
-                        "--meta", tmp_meta_path
-                        ],
-                       check=True)
+        if args.report:
+            subprocess.run(["python",
+                            "src/main.py",
+                            "--otu", tmp_otu_path,
+                            "--meta", tmp_meta_path,
+                            "-r", True,
+                            "-p", patient_id,
+                            ],
+                        check=True)
+        else:
+            subprocess.run(["python",
+                            "src/main.py",
+                            "--otu", tmp_otu_path,
+                            "--meta", tmp_meta_path
+                            ],
+                        check=True)
 
 
 if __name__ == "__main__":
