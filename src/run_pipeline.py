@@ -20,6 +20,12 @@ def main():
     parser.add_argument("--metadata_file",
                         required=True,
                         help="Path to metadata file")
+    
+    parser.add_argument('--min_patients',
+                        type=int,
+                        help='Sets the threshold for minimum # patients when filtering by location (default=20)',  # noqa
+                        default=20,
+                        required=False)
 
     parser.add_argument('-r',
                         '--report',
@@ -53,8 +59,9 @@ def main():
     # Filter by location (if provided)
     if args.location:
         keep_samples = metadata[metadata["Location"] == args.location].index
-        metadata = metadata.loc[keep_samples]
-        otu = otu.loc[keep_samples]
+        if len(keep_samples) >= args.min_patients:
+            metadata = metadata.loc[keep_samples]
+            otu = otu.loc[keep_samples]
 
     # Create temporary filtered files
     with tempfile.TemporaryDirectory() as tmpdir:
