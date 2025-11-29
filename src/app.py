@@ -18,7 +18,42 @@ def generate_example_table(max_rows=10):
     ])
     return table
 
-  
+
+def create_report(date, patient_id, data):
+    fig = data[0]
+    table = data[1]
+
+    app = Dash(__name__, external_stylesheets=[dbc.themes.FLATLY])
+    app.layout = html.Div([
+        # Title
+        html.H1("Gut Microbiome Report"),
+        # Patient name and date
+        html.Div(children=[html.H3(f"{patient_id}"), html.P(f"{date}")],
+                style={'margin-top': 10,
+                        'display': 'flex',
+                        'justifyContent': 'space-around',
+                        'alignItems': 'center'}),
+        # Summary
+        html.Div(html.H2("Summary")),
+        # html.Hr(style={'borderWidth': '5px',
+        #                'borderColor': 'blue'}),
+        html.Div(html.H3(children='US Agriculture Exports (2011)')), 
+        html.Div(table,
+                style={'margin-left': 10,
+                        'display': 'flex',
+                        'align' : 'center'}),
+        # Content Block
+        html.Div(html.H2("Content")),
+        # Example Plotly Integration
+        dcc.Graph(id='example-graph', figure=fig),
+        # Footer - Disclaimer
+        html.Div(html.H5(f"{disclaimer}"))
+
+        ], className='report-container')
+    
+    app.run(debug=True, port=8050)
+
+
 patient_id='John Doe'
 date='11/25/2025'
 disclaimer='''This report was generated using BioTrack, 
@@ -33,34 +68,9 @@ disclaimer='''This report was generated using BioTrack,
 fig = generate_example_fig()
 table = generate_example_table(max_rows=5)
 
-app = Dash(__name__, external_stylesheets=[dbc.themes.FLATLY])
+create_report(date, patient_id, [fig,table])
 
-app.layout = html.Div([
-    # Title
-    html.H1("Gut Microbiome Report"),
-    # Patient name and date
-    html.Div(children=[html.H3(f"{patient_id}"), html.P(f"{date}")],
-             style={'margin-top': 10,
-                    'display': 'flex',
-                    'justifyContent': 'space-around',
-                    'alignItems': 'center'}),
-    # Summary
-    html.Div(html.H2("Summary")),
-    # html.Hr(style={'borderWidth': '5px',
-    #                'borderColor': 'blue'}),
-    html.Div(html.H3(children='US Agriculture Exports (2011)')), 
-    html.Div(table,
-             style={'margin-left': 10,
-                    'display': 'flex',
-                    'align' : 'center'}),
-    # Content Block
-    html.Div(html.H2("Content")),
-    # Example Plotly Integration
-    dcc.Graph(id='example-graph', figure=fig),
-    # Footer - Disclaimer
-    html.Div(html.H5(f"{disclaimer}"))
 
-], className='report-container')
 
 # app.layout = dbc.Container([
 #                             
@@ -109,5 +119,5 @@ app.layout = html.Div([
 #                             style={},
 #                             className='report-container')
 
-if __name__ == "__main__":
-    app.run(debug=True, port=8050)
+# if __name__ == "__main__":
+#     app.run(debug=True, port=8050)
