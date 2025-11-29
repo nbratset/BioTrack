@@ -3,6 +3,7 @@ import pandas as pd
 import subprocess
 import tempfile
 import os
+import sys
 
 
 def main():
@@ -37,8 +38,17 @@ def main():
     args = parser.parse_args()
 
     # Load data
-    otu = pd.read_csv(args.otu_file, index_col=0)
-    metadata = pd.read_csv(args.metadata_file, index_col=0)
+    try:
+        otu = pd.read_csv(args.otu_file, index_col=0)
+    except FileNotFoundError as e:
+        print('Missing OTU File')
+        sys.exit(0)
+
+    try:
+        metadata = pd.read_csv(args.metadata_file, index_col=0)
+    except FileNotFoundError as e:
+        print('Missing Metadata File')
+        sys.exit(0)
 
     # Filter by location (if provided)
     if args.location:
