@@ -239,7 +239,7 @@ plt.tight_layout()
 plt.savefig(f"{OUTDIR}/differential_abundance.png", dpi=300)
 plt.close()
 
-#Visualizing patient species profile
+# Visualizing patient species profile
 patient = metadata[metadata["Condition"] == "Patient"]
 otu_patient = otu.loc[patient.index]
 
@@ -254,3 +254,8 @@ barplot_taxa_facet_fill(
     out_file=f"{OUTDIR}/top10_taxa_patient.png"
 )
 
+# Generate Report
+if args.report:
+    # run app.py
+    # args: patient ID; data?
+    pass
