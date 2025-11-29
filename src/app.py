@@ -18,8 +18,16 @@ def generate_example_table(max_rows=10):
     ])
     return table
 
-
 def create_report(date, patient_id, data):
+    disclaimer='''This report was generated using BioTrack, 
+                an open-source gut microbiome analysis software.
+                DISCLAIMER: This report does not provide medical advice.
+                The information in this report is intended to be
+                reviewed by a medical professional and cannot
+                independently provide medical diagnoses. Always seek
+                the advice of your physician or medical health provider
+                for an official diagnosis and treatment information.'''
+
     fig = data[0]
     table = data[1]
 
@@ -35,8 +43,7 @@ def create_report(date, patient_id, data):
                         'alignItems': 'center'}),
         # Summary
         html.Div(html.H2("Summary")),
-        # html.Hr(style={'borderWidth': '5px',
-        #                'borderColor': 'blue'}),
+
         html.Div(html.H3(children='US Agriculture Exports (2011)')), 
         html.Div(table,
                 style={'margin-left': 10,
@@ -53,22 +60,14 @@ def create_report(date, patient_id, data):
     
     app.run(debug=True, port=8050)
 
+def main():
+    patient_id='John Doe'
+    date='11/25/2025'
 
-patient_id='John Doe'
-date='11/25/2025'
-disclaimer='''This report was generated using BioTrack, 
-              an open-source gut microbiome analysis software.
-              DISCLAIMER: This report does not provide medical advice.
-              The information in this report is intended to be
-              reviewed by a medical professional and cannot
-              independently provide medical diagnoses. Always seek
-              the advice of your physician or medical health provider
-              for an official diagnosis and treatment information.'''
+    fig = generate_example_fig()
+    table = generate_example_table(max_rows=5)
 
-fig = generate_example_fig()
-table = generate_example_table(max_rows=5)
-
-create_report(date, patient_id, [fig,table])
+    create_report(date, patient_id, [fig,table])
 
 
 
@@ -119,5 +118,5 @@ create_report(date, patient_id, [fig,table])
 #                             style={},
 #                             className='report-container')
 
-# if __name__ == "__main__":
-#     app.run(debug=True, port=8050)
+if __name__ == "__main__":
+    main()
