@@ -4,11 +4,13 @@ import subprocess
 import tempfile
 import os
 import sys
-sys.path.append("src") # noqa
-import app # this is src/app.py
+sys.path.append("src")  # noqa
+import app  # this is src/app.py
+
 
 def make_app(date, patient, ):
     pass
+
 
 def main():
     parser = argparse.ArgumentParser(prog='BioTrack',
@@ -24,7 +26,7 @@ def main():
     parser.add_argument("--metadata_file",
                         required=True,
                         help="Path to metadata file")
-    
+
     parser.add_argument('--min_patients',
                         type=int,
                         help='Sets the threshold for minimum # patients when filtering by location (default=20)',  # noqa
@@ -96,11 +98,11 @@ def main():
                         "--otu", tmp_otu_path,
                         "--meta", tmp_meta_path
                         ],
-                    check=True)
+                       check=True)
 
         if args.report:
             make_app()
 
+
 if __name__ == "__main__":
     main()
-
