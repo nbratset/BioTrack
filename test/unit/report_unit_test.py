@@ -1,5 +1,6 @@
 import sys
 import unittest
+import pandas as pd
 
 sys.path.append('src/')  # noqa
 sys.path.append('test/unit/')  # noqa
@@ -27,6 +28,12 @@ class TestReport(unittest.TestCase):
         beta_file = 'results/beta_diversity_coords.csv'
         df1, df2, df3 = app.parse_csvs(taxa_file, alpha_file, beta_file)
         # I'll test for sys.exit(0) here if you have a bad file. 
+
+    def test_get_patient(self):
+        alpha_file = 'results/alpha_diversity.csv'
+        df = pd.read_csv(alpha_file)
+        self.assertEqual(app.get_patient(df), 'SRR5946632')
+        pass
 
     def test_parse_rf(self):
         # I want this to parse the rf file for the patient prediction
