@@ -4,7 +4,11 @@ import subprocess
 import tempfile
 import os
 import sys
+sys.path.append("src") # noqa
+import app # this is src/app.py
 
+def make_app(date, patient, ):
+    pass
 
 def main():
     parser = argparse.ArgumentParser(prog='BioTrack',
@@ -86,23 +90,16 @@ def main():
         metadata.to_csv(tmp_meta_path)
 
         # Call main.py and pass filtered files
-        if args.report:
-            subprocess.run(["python",
-                            "src/main.py",
-                            "--otu", tmp_otu_path,
-                            "--meta", tmp_meta_path,
-                            "-r", True,
-                            "-p", patient_id,
-                            ],
-                        check=True)
-        else:
-            subprocess.run(["python",
-                            "src/main.py",
-                            "--otu", tmp_otu_path,
-                            "--meta", tmp_meta_path
-                            ],
-                        check=True)
 
+        subprocess.run(["python",
+                        "src/main.py",
+                        "--otu", tmp_otu_path,
+                        "--meta", tmp_meta_path
+                        ],
+                    check=True)
+
+        if args.report:
+            make_app()
 
 if __name__ == "__main__":
     main()

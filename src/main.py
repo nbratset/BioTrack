@@ -253,9 +253,3 @@ barplot_taxa_facet_fill(
     height_per_condition=10,
     out_file=f"{OUTDIR}/top10_taxa_patient.png"
 )
-
-# Generate Report
-if args.report:
-    # run app.py
-    # args: patient ID; data?
-    pass
