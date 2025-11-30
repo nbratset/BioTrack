@@ -7,7 +7,7 @@ import sys
 sys.path.append("src") # noqa
 import app # this is src/app.py
 
-def make_app():
+def make_app(date, patient, ):
     pass
 
 def main():
