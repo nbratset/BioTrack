@@ -26,11 +26,11 @@ otu = pd.read_csv(args.otu, index_col=0)
 metadata = pd.read_csv(args.meta, index_col=0)
 tax = pd.read_csv("input_data/tax.csv", index_col=0)      
 
-#Save results
+# Save results
 OUTDIR = "results"
 os.makedirs(OUTDIR, exist_ok=True)
 
-#QC filtering
+# QC filtering
 min_abundance = 0.001
 min_samples = 5
 otu =  otu.loc[:, (otu > min_abundance).sum(axis=0) >= min_samples] 
@@ -53,7 +53,7 @@ coords, var_exp = run_pcoa(beta)
 coords = coords.join(metadata[["Condition", "Location"]])
 coords.to_csv(f"{OUTDIR}/beta_diversity_coords.csv")
 
-##PCoA1 vs PCoA2
+# PCoA1 vs PCoA2
 plt.figure(figsize=(15,10))
 sns.scatterplot(x="PC1",
                 y="PC2",
@@ -65,6 +65,7 @@ sns.scatterplot(x="PC1",
                 palette="tab10",
                 style="Location",
                 legend=True)
+
 sns.scatterplot(x="PC1",
                 y="PC2",
                 data=coords[coords["Condition"] == "Patient"],
@@ -73,6 +74,7 @@ sns.scatterplot(x="PC1",
                 marker="X",
                 edgecolor="k",
                 label="Patient")
+
 plt.xlabel(f"PCoA1 ({var_exp[0]*100:.1f}%)")
 plt.ylabel(f"PCoA2 ({var_exp[1]*100:.1f}%)")
 plt.title("PCoA Plot (Bray-Curtis)")
@@ -123,39 +125,36 @@ plt.tight_layout()
 plt.savefig(f"{OUTDIR}/pcoa3_boxplot.png", dpi=300)
 plt.close()
 
-#Alpha diversity
+# Alpha diversity
 alpha_df = compute_alpha(otu)
 alpha_df
 alpha_df = alpha_df.join(metadata[["Condition", "Location"]])
 alpha_df.to_csv(f"{OUTDIR}/alpha_diversity.csv")
 
-##Richness
+# Richness
 plt.figure(figsize=(10,6))
-g = sns.catplot(
-    data=alpha_df,
-    x="Condition",
-    y="Observed",
-    col="Location",
-    kind="box",
-    height=4,
-    aspect=1,
-    showfliers=False,     
-    boxprops={'alpha':0.7},
-    col_wrap=3
-)
+g = sns.catplot(data=alpha_df,
+                x="Condition",
+                y="Observed",
+                col="Location",
+                kind="box",
+                height=4,
+                aspect=1,
+                showfliers=False,
+                boxprops={'alpha':0.7},
+                col_wrap=3)
 for ax, loc in zip(g.axes.flat, alpha_df["Location"].unique()):
     df_sub = alpha_df[alpha_df["Location"] == loc]
-    sns.stripplot(
-        x="Condition",
-        y="Observed",
-        data=df_sub,
-        color="black",
-        size=6,
-        jitter=True,
-        alpha=0.8,
-        ax=ax
-    )
+    sns.stripplot(x="Condition",
+                  y="Observed",
+                  data=df_sub,
+                  color="black",
+                  size=6,
+                  jitter=True,
+                  alpha=0.8,
+                  ax=ax)
     ax.set_xticklabels(ax.get_xticklabels(), rotation=90)
+
 g.set_axis_labels("Condition", "Observed Alpha Diversity")
 g.fig.subplots_adjust(top=0.9)
 g.fig.suptitle("Alpha Diversity (Richness)", fontsize=16)
@@ -163,33 +162,30 @@ plt.tight_layout()
 plt.savefig(f"{OUTDIR}/alpha_diversity_plot_obs.png", dpi=300)
 plt.close()
 
-#Shannon
+# Shannon
 plt.figure(figsize=(10,6))
-g = sns.catplot(
-    data=alpha_df,
-    x="Condition",
-    y="Shannon",
-    col="Location",
-    kind="box",
-    height=4,
-    aspect=1,
-    showfliers=False,     
-    boxprops={'alpha':0.7},
-    col_wrap=3
-)
+g = sns.catplot(data=alpha_df,
+                x="Condition",
+                y="Shannon",
+                col="Location",
+                kind="box",
+                height=4,
+                aspect=1,
+                showfliers=False,
+                boxprops={'alpha':0.7},
+                col_wrap=3)
 for ax, loc in zip(g.axes.flat, alpha_df["Location"].unique()):
     df_sub = alpha_df[alpha_df["Location"] == loc]
-    sns.stripplot(
-        x="Condition",
-        y="Shannon",
-        data=df_sub,
-        color="black",
-        size=6,
-        jitter=True,
-        alpha=0.8,
-        ax=ax
-    )
+    sns.stripplot(x="Condition",
+                  y="Shannon",
+                  data=df_sub,
+                  color="black",
+                  size=6,
+                  jitter=True,
+                  alpha=0.8,
+                  ax=ax)
     ax.set_xticklabels(ax.get_xticklabels(), rotation=90)
+
 g.set_axis_labels("Condition", "Observed Alpha Diversity")
 g.fig.subplots_adjust(top=0.9)
 g.fig.suptitle("Alpha Diversity (Shannon)", fontsize=16)
@@ -197,7 +193,7 @@ plt.tight_layout()
 plt.savefig(f"{OUTDIR}/alpha_diversity_plot_shannon.png", dpi=300)
 plt.close()
 
-#Random Forest
+# Random Forest
 dataMatrix = otu.copy()
 dataMatrix["Condition"] = metadata["Condition"]
 
@@ -211,10 +207,10 @@ auc_fig, confusion_mat, patient_preds = run_rf_multiclass(
     report_txt=f"{OUTDIR}/rf_report.txt"
 )
 
-#Differential abundance
+# Differential abundance
 metadata_daa = metadata[metadata["Condition"] != "Patient"]
-metadata_daa.loc[metadata_daa["Condition"] == "Ulcerative colitis", "Condition"] = "Disease"
-metadata_daa.loc[metadata_daa["Condition"] == "Crohn's disease", "Condition"] = "Disease"
+metadata_daa.loc[metadata_daa["Condition"] == "Ulcerative colitis", "Condition"] = "Disease"  # noqa
+metadata_daa.loc[metadata_daa["Condition"] == "Crohn's disease", "Condition"] = "Disease"  # noqa
 group = metadata_daa["Condition"]
 otu_daa = otu.loc[metadata_daa.index]
 otu_daa = otu_daa + 1e-6
@@ -243,13 +239,12 @@ plt.close()
 patient = metadata[metadata["Condition"] == "Patient"]
 otu_patient = otu.loc[patient.index]
 
-barplot_taxa_facet_fill(
-    otu_table=otu_patient,
-    taxonomy_series=taxonomy_series,
-    metadata=patient,
-    level="Species",
-    top_n=10,
-    fig_width=12,
-    height_per_condition=10,
-    out_file=f"{OUTDIR}/top10_taxa_patient.png"
-)
+barplot_taxa_facet_fill(otu_table=otu_patient,
+                        taxonomy_series=taxonomy_series,
+                        metadata=patient,
+                        level="Species",
+                        top_n=10,
+                        fig_width=12,
+                        height_per_condition=10,
+                        out_file=f"{OUTDIR}/top10_taxa_patient.png")
+
