@@ -3,6 +3,7 @@ from dash import Dash, html, dcc
 import dash_bootstrap_components as dbc
 import plotly.express as px
 
+
 def generate_example_fig():
     df = pd.DataFrame({"Fruit": ["Apples", "Oranges",
                                  "Bananas", "Apples",
@@ -47,17 +48,17 @@ def create_report(date, patient_id, data):
         # Patient name and date
         html.Div(children=[html.H3(f"{patient_id}"), html.P(f"{date}")],
                  style={'margin-top': 10,
-                          'display': 'flex',
-                          'justifyContent': 'space-around',
-                          'alignItems': 'center'}),
+                        'display': 'flex',
+                        'justifyContent': 'space-around',
+                        'alignItems': 'center'}),
         # Summary
         html.Div(html.H2("Summary")),
 
         html.Div(html.H3(children='US Agriculture Exports (2011)')),
         html.Div(table,
                  style={'margin-left': 10,
-                          'display': 'flex',
-                          'align': 'center'}),
+                        'display': 'flex',
+                        'align': 'center'}),
         # Content Block
         html.Div(html.H2("Content")),
         # Example Plotly Integration
