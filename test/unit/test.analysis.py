@@ -36,8 +36,8 @@ class TestAnalysis(unittest.TestCase):
         self.assertTrue(os.path.exists("alpha_diversity_metrics.tsv"))
 
     @patch("analysis.ro.r")  # noqa
-
-
+# noqa
+# noqa
     def test_maaslin_file_creation_and_r_call(self, mock_r):
         """Verify MaAsLin2 input files are written,
            R is called, and outputs are correct."""
@@ -61,7 +61,6 @@ class TestAnalysis(unittest.TestCase):
 
         # 4️⃣ Verify output directory path returned
         self.assertIn("maaslin2_output", r_out)
-
 
     def test_calc_taxa_top20_and_grouping(self):
         result = analysis.calc_taxa(self.otu_table, self.metadata)

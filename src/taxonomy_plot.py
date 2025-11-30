@@ -2,13 +2,14 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+
 def barplot_taxa_facet_fill(otu_table, taxonomy_series, metadata,
                             level="Genus", top_n=10, out_file=None,
                             fig_width=25, height_per_condition=6):
     """
     Creates stacked normalized barplots of top N taxa by condition,
     sorting samples by their dominant genus. Only one legend is kept.
-    
+
     Parameters:
         otu_table: DataFrame, samples as rows, OTUs as columns
         taxonomy_series: pandas Series, index=OTUs, value=taxonomy string
@@ -22,7 +23,7 @@ def barplot_taxa_facet_fill(otu_table, taxonomy_series, metadata,
     taxa_df = taxonomy_series.str.split(";", expand=True)
     taxa_df.columns = ["K", "P", "C", "O", "F", "G", "S"]
     lvl_map = {"Kingdom": "K", "Phylum": "P", "Class": "C",
-               "Order": "O","Family": "F", "Genus": "G", "Species": "S"}
+               "Order": "O", "Family": "F", "Genus": "G", "Species": "S"}
     lvl = lvl_map.get(level, level)
     otu_by_tax = otu_table.T.groupby(taxa_df[lvl]).sum().T
 
