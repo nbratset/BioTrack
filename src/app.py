@@ -39,10 +39,29 @@ def parse_rf_export(rf_file):
     else:
         return prediction
 
+def get_patient(df):
+    '''Gets patient identifier for later searching in the csvs'''
+    patient = df[df["Condition"] == 'Patient'].index.to_list()
+    if len(patient) > 1:
+        print('Check metadata file, multiple patients were found!')
+        sys.exit(0)
+    elif len(patient) == 0:
+        print('Check metadata file, no patients found!')
+        sys.exit(0)
+    elif len(patient) == 1:
+        return patient[0]
 
-def plot_top_taxa():
-    # plots top x (10 by default) taxa of the patient
-    pass
+
+def plot_top_taxa(df, patient):
+    '''Plots a pie chart of the top 10 taxa.'''
+    taxa_list = df.loc[patient].head(10)  # filter by patient and top 10 taxa
+    filtered_df = pd.DataFrame(taxa_list)  # convert back to a dataframe
+    fig = px.pie(filtered_df,
+                 values=patient,
+                 names=filtered_df.index,
+                 title=f'Pie Chart of {patient} Top 10 Taxa',
+                 hole=.3)
+    return fig
 
 
 def plot_alpha_diversity():
@@ -159,13 +178,15 @@ def main():
     taxa_file = 'input_data/otu.csv'
     alpha_file = 'results/alpha_diversity.csv'
     beta_file = 'results/beta_diversity_coords.csv'
+
     taxa, alpha, beta = parse_csvs(taxa_file, alpha_file, beta_file)
     prediction = parse_rf_export('results/rf_report.txt')
-    print(prediction)
+    id = get_patient(alpha)
+    fig =plot_top_taxa(taxa, id)
     # fig = generate_example_fig()
-    # table = generate_example_table(max_rows=5)
+    table = generate_example_table(max_rows=5)
 
-    # create_report(date, patient_id, [fig, table], dev_mode=True)
+    create_report(date, patient_id, [fig, table], dev_mode=True)
 
 
 if __name__ == "__main__":
