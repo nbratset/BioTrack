@@ -2,12 +2,26 @@ import pandas as pd
 from dash import Dash, html, dcc
 import dash_bootstrap_components as dbc
 import plotly.express as px
+import sys
 
 
 def parse_csvs(taxa_otu_file, alpha_div_file, beta_pcoa_file):
-    taxa_otu_df = pd.read_csv(taxa_otu_file, index_col=0)
-    alpha_div_df = pd.read_csv(alpha_div_file, index_col=0)
-    beta_pcoa_df = pd.read_csv(beta_pcoa_file, index_col=0)
+    '''Converts 3 primary csvs to dataframes for later plotting.'''
+    try:
+        taxa_otu_df = pd.read_csv(taxa_otu_file, index_col=0)
+    except FileNotFoundError as e:
+        print('Missing Taxa/OTU File')
+        sys.exit(0)
+    try:
+        alpha_div_df = pd.read_csv(alpha_div_file, index_col=0)
+    except FileNotFoundError as e:
+        print('Missing alpha diversity File')
+        sys.exit(0)
+    try:
+        beta_pcoa_df = pd.read_csv(beta_pcoa_file, index_col=0)
+    except FileNotFoundError as e:
+        print('Missing beta diversity File')
+        sys.exit(0)
     return taxa_otu_df, alpha_div_df, beta_pcoa_df
 
 
