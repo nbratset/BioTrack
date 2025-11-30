@@ -4,11 +4,15 @@ import dash_bootstrap_components as dbc
 import plotly.express as px
 
 
-def import_files():
-    pass
+def parse_csvs(taxa_otu_file, alpha_div_file, beta_pcoa_file):
+    taxa_otu_df = pd.read_csv(taxa_otu_file, index_col=0)
+    alpha_div_df = pd.read_csv(alpha_div_file, index_col=0)
+    beta_pcoa_df = pd.read_csv(beta_pcoa_file, index_col=0)
+    return taxa_otu_df, alpha_div_df, beta_pcoa_df
 
 
-def parse_rf_export():
+def parse_rf_export(rf_file):
+    # import results/rf_report.txt
     # parses rf_report.txt
     pass
 
@@ -125,13 +129,18 @@ def create_report(date, patient_id, data, dev_mode=False):
 
 def main():
     '''This main runs on the example data for testing/building the report.'''
+    # add argparse here
+
     patient_id = 'John Doe'
     date = '11/25/2025'
+    taxa_file = 'input_data/otu.csv'
+    alpha_file = 'results/alpha_diversity.csv'
+    beta_file = 'results/beta_diversity_coords.csv'
+    taxa, alpha, beta = parse_csvs(taxa_file, alpha_file, beta_file)
+    # fig = generate_example_fig()
+    # table = generate_example_table(max_rows=5)
 
-    fig = generate_example_fig()
-    table = generate_example_table(max_rows=5)
-
-    create_report(date, patient_id, [fig, table], dev_mode=True)
+    # create_report(date, patient_id, [fig, table], dev_mode=True)
 
 
 if __name__ == "__main__":
