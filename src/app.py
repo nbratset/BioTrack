@@ -46,7 +46,7 @@ def create_report(date, patient_id, data):
         html.H1("Gut Microbiome Report"),
         # Patient name and date
         html.Div(children=[html.H3(f"{patient_id}"), html.P(f"{date}")],
-                 style = {'margin-top': 10,
+                 style={'margin-top': 10,
                           'display': 'flex',
                           'justifyContent': 'space-around',
                           'alignItems': 'center'}),
@@ -55,7 +55,7 @@ def create_report(date, patient_id, data):
 
         html.Div(html.H3(children='US Agriculture Exports (2011)')),
         html.Div(table,
-                 style = {'margin-left': 10,
+                 style={'margin-left': 10,
                           'display': 'flex',
                           'align': 'center'}),
         # Content Block
@@ -68,6 +68,7 @@ def create_report(date, patient_id, data):
         ], className='report-container')
 
     app.run(debug=True, port=8050)
+
 
 def main():
     patient_id = 'John Doe'
