@@ -4,6 +4,35 @@ import dash_bootstrap_components as dbc
 import plotly.express as px
 
 
+def import_files():
+    pass
+
+
+def parse_rf_export():
+    # parses rf_report.txt
+    pass
+
+
+def plot_top_taxa():
+    # plots top x (10 by default) taxa of the patient
+    pass
+
+
+def plot_alpha_diversity():
+    # plots shannon and richness a div
+    pass
+
+
+def plot_pca():
+    # plots PCA 1 and 2 from beta_div_coords file
+    pass
+
+
+def plot_diff_abundance():
+    # plots differential abundance info?
+    pass
+
+
 def generate_example_fig():
     ''' This is an example figure from the dash documentation for testing.'''
     df = pd.DataFrame({"Fruit": ["Apples", "Oranges",
@@ -30,7 +59,12 @@ def generate_example_table(max_rows=10):
     return table
 
 
-def create_report(date, patient_id, data):
+def create_report(date, patient_id, data, dev_mode=False):
+    ''' Creates an interactive dashboard when run.
+        You can access this dashboard at:
+            http://127.0.0.1:8050/ (this is a local address)
+        Right click on the dashboard to save or print to PDF.
+    '''
     fig = data[0]
     table = data[1]
 
@@ -61,16 +95,32 @@ def create_report(date, patient_id, data):
                  style={'margin-left': 10,
                         'display': 'flex',
                         'align': 'center'}),
-        # Content Block
-        html.Div(html.H2("Content")),
+        # Taxa Block
+        html.Div(html.H2("Patient's Top 10 Taxa")),
         # Example Plotly Integration
         dcc.Graph(id='example-graph', figure=fig),
+
+        # Alpha Block
+        html.Div(html.H2("Patient Alpha Diversity Compared to the Model")),
+        # Example Plotly Integration
+        dcc.Graph(id='example-graph', figure=fig),
+
+        # PCOA Block
+        html.Div(html.H2("Patient PCA Compared to the Model")),
+        # Example Plotly Integration
+        dcc.Graph(id='example-graph', figure=fig),
+
+        # Model Statistics Block
+        html.Div(html.H2("Model Statistics")),
+        # Example Plotly Integration
+        dcc.Graph(id='example-graph', figure=fig),
+
         # Footer - Disclaimer
         html.Div(html.H5(f"{disclaimer}"))
 
         ], className='report-container')
 
-    app.run(debug=True, port=8050)
+    app.run(debug=dev_mode, port=8050)
 
 
 def main():
@@ -81,7 +131,7 @@ def main():
     fig = generate_example_fig()
     table = generate_example_table(max_rows=5)
 
-    create_report(date, patient_id, [fig, table])
+    create_report(date, patient_id, [fig, table], dev_mode=True)
 
 
 if __name__ == "__main__":
