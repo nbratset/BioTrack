@@ -12,9 +12,18 @@ def parse_csvs(taxa_otu_file, alpha_div_file, beta_pcoa_file):
 
 
 def parse_rf_export(rf_file):
-    # import results/rf_report.txt
-    # parses rf_report.txt
-    pass
+    prediction = ''
+    line_list = []
+    with open(rf_file, 'r', encoding='utf-8') as file:
+        for line in file:
+            line_list.append(line)
+            split = line.strip().split("'")
+            if 'Predictions: [' in split:
+                prediction = split[1]
+    if prediction == '':
+        print(f'Cannot find prediction in {rf_file}')
+    else:
+        return prediction
 
 
 def plot_top_taxa():
@@ -137,6 +146,8 @@ def main():
     alpha_file = 'results/alpha_diversity.csv'
     beta_file = 'results/beta_diversity_coords.csv'
     taxa, alpha, beta = parse_csvs(taxa_file, alpha_file, beta_file)
+    prediction = parse_rf_export('results/rf_report.txt')
+    print(prediction)
     # fig = generate_example_fig()
     # table = generate_example_table(max_rows=5)
 
