@@ -5,6 +5,7 @@ import plotly.express as px
 
 
 def generate_example_fig():
+    ''' This is an example figure from the dash documentation for testing.'''
     df = pd.DataFrame({"Fruit": ["Apples", "Oranges",
                                  "Bananas", "Apples",
                                  "Oranges", "Bananas"],
@@ -20,6 +21,7 @@ def generate_example_fig():
 
 
 def generate_example_table(max_rows=10):
+    ''' This is an example table from the dash documentation for testing.'''
     dataframe = pd.read_csv('https://gist.githubusercontent.com/chriddyp/c78bf172206ce24f77d6363a2d754b59/raw/c353e8ef842413cae56ae3920b8fd78468aa4cb2/usa-agricultural-exports-2011.csv',  # noqa
                             index_col=0,
                             usecols=[0, 1, 2, 3, 4])
@@ -72,6 +74,7 @@ def create_report(date, patient_id, data):
 
 
 def main():
+    '''This main runs on the example data for testing/building the report.'''
     patient_id = 'John Doe'
     date = '11/25/2025'
 
