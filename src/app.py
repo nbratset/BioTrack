@@ -7,7 +7,7 @@ import sys
 sys.path.append('results/')
 
 
-def parse_csvs(taxa_otu_file, alpha_div_file, beta_pcoa_file):
+def parse_csvs(taxa_otu_file, alpha_div_file, beta_pcoa_file, diff_file):
     '''Converts 3 primary csvs to dataframes for later plotting.'''
     try:
         taxa_otu_df = pd.read_csv(taxa_otu_file, index_col=0)
@@ -24,7 +24,12 @@ def parse_csvs(taxa_otu_file, alpha_div_file, beta_pcoa_file):
     except FileNotFoundError as e:
         print('Missing beta diversity File')
         sys.exit(0)
-    return taxa_otu_df, alpha_div_df, beta_pcoa_df
+    try:
+        diff_df = pd.read_csv(diff_file, index_col=0)
+    except FileNotFoundError as e:
+        print('Missing Differential Abundance File')
+        sys.exit(0)
+    return taxa_otu_df, alpha_div_df, beta_pcoa_df, diff_df
 
 
 def parse_rf_export(rf_file):
@@ -61,7 +66,6 @@ def plot_top_taxa(df, patient):
     fig = px.pie(filtered_df,
                  values=patient,
                  names=filtered_df.index,
-                 title=f'Pie Chart of {patient} Top 10 Taxa',
                  hole=.3)
     return fig
 
@@ -82,13 +86,14 @@ def plot_pca(df):
     '''Plots PC1 and PC2'''
     fig = px.scatter(df, x='PC1', y='PC2', color='Condition', color_discrete_map={'Patient': 'red', 'Healthy control': 'green', 'Ulcerative colitis':'blue', "Crohn's disease": 'purple'})
     fig.data = fig.data[::-1]
-    fig.write_html("interactive_plot.html")
     return fig
 
 
-def plot_diff_abundance():
-    # plots differential abundance info?
-    pass
+def plot_diff_abundance(df):
+    fig = px.bar(df, x=df.index, y='Diff')
+    fig.update_xaxes(title_text=f'Taxa')
+    fig.update_yaxes(title_text=f'Abundance (Healthy - Disease)')
+    return fig
 
 
 def generate_example_fig():
@@ -107,14 +112,14 @@ def generate_example_fig():
     return fig
 
 
-def generate_example_table(dataframe, max_rows=10):
+def generate_table(dataframe, max_rows=10):
     ''' This is an example table from the dash documentation for testing.'''
     table = html.Table([html.Thead(html.Tr([html.Th(col) for col in dataframe.columns])),  # noqa
                        html.Tbody([html.Tr([html.Td(dataframe.iloc[i][col]) for col in dataframe.columns]) for i in range(min(len(dataframe), max_rows))])])  # noqa
     return table
 
 
-def create_report(date, patient_name, id, result, taxa, alpha, beta, dev_mode=False):
+def create_report(date, patient_name, id, result, taxa, alpha, beta, diff, dev_mode=False):
     ''' Creates an interactive dashboard when run.
         You can access this dashboard at:
             http://127.0.0.1:8050/ (this is a local address)
@@ -130,39 +135,35 @@ def create_report(date, patient_name, id, result, taxa, alpha, beta, dev_mode=Fa
                 the advice of your physician or medical health provider
                 for an official diagnosis and treatment information.'''
 
-    summary = f'''This model predicted that this patient's microbiome data
-                  aligns the closest with: {result}. The following plots
-                  are various representations of the microbiome analysis.'''
+    summary = f'''Patient's Health Prediction: {result}'''
 
     app = Dash(__name__, external_stylesheets=[dbc.themes.FLATLY])
     app.layout = html.Div([
+        html.H5(f"Generated on {date} using BioTrack", style={'color': '#ffffff'}),
         # Title
         html.H1("Gut Microbiome Report"),
 
-        # Patient name and date
-        html.Div(children=[html.P(f"Patient: {patient_name} ({id})"), html.P(f"Date:{date}")]),
-
         # Summary
         html.Div(html.H2("Summary")),
+        html.Div(children=[html.P(f"Patient: {patient_name} ({id})"), html.P(f"Date:{date}")]),
         html.P(f"{summary}"),
 
         # Taxa Block
         html.Div(html.H2("Patient's Top 10 Taxa")),
-        dcc.Graph(id='example-graph', figure=plot_top_taxa(taxa, id)),
+        dcc.Graph(id='Top Taxa', figure=plot_top_taxa(taxa, id)),
 
         # Alpha Block
         html.Div(html.H2("Patient Alpha Diversity Compared to the Model")),
-        dcc.Graph(id='example-graph', figure=plot_alpha_diversity(alpha, 'Shannon')),
-        dcc.Graph(id='example-graph', figure=plot_alpha_diversity(alpha, 'Simpson')),
+        dcc.Graph(id='Shannon', figure=plot_alpha_diversity(alpha, 'Shannon')),
+        dcc.Graph(id='Simpson', figure=plot_alpha_diversity(alpha, 'Simpson')),
 
         # PCOA Block
-        html.Div(html.H2("Patient PCA Compared to the Model")),
-        dcc.Graph(id='example-graph', figure=plot_pca(beta)),
+        html.Div(html.H2("PCoA Plot (Bray-Curtis)")),
+        dcc.Graph(id='PCA Plot', figure=plot_pca(beta)),
 
         # Diff Abundance
         html.Div(html.H2("Differential Abundance")),
-        # Example Plotly Integration
-        # dcc.Graph(id='example-graph', figure=fig),
+        dcc.Graph(id='Differential Abundance', figure=plot_diff_abundance(diff)),
 
         # Footer - Disclaimer
         html.Div(html.H2("Additional Info")),
@@ -182,12 +183,13 @@ def main():
     taxa_file = 'input_data/otu.csv'
     alpha_file = 'results/alpha_diversity.csv'
     beta_file = 'results/beta_diversity_coords.csv'
+    diff_file = 'results/differential_abundance_top_20.csv'
 
-    taxa, alpha, beta = parse_csvs(taxa_file, alpha_file, beta_file)
+    taxa, alpha, beta, diff = parse_csvs(taxa_file, alpha_file, beta_file, diff_file)
     id = get_patient(alpha)
     prediction = parse_rf_export('results/rf_report.txt')
 
-    create_report(date, patient_name, id, prediction, taxa, alpha, beta, dev_mode=True)
+    create_report(date, patient_name, id, prediction, taxa, alpha, beta, diff)
 
 
 if __name__ == "__main__":
