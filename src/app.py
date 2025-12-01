@@ -1,10 +1,10 @@
+import argparse
+from datetime import date
 import pandas as pd
 from dash import Dash, html, dcc
-import dash
 import dash_bootstrap_components as dbc
 import plotly.express as px
 import sys
-sys.path.append('results/')
 
 
 def parse_csvs(taxa_otu_file, alpha_div_file, beta_pcoa_file, diff_file):
@@ -45,6 +45,7 @@ def parse_rf_export(rf_file):
         print(f'Cannot find prediction in {rf_file}')
     else:
         return prediction
+
 
 def get_patient(df):
     '''Gets patient identifier for later searching in the csvs'''
@@ -176,20 +177,55 @@ def create_report(date, patient_name, id, result, taxa, alpha, beta, diff, dev_m
 
 def main():
     '''This main runs on the example data for testing/building the report.'''
-    # add argparse here
+    today = date.today()
+    parser = argparse.ArgumentParser(description='Generates a report',
+                                     prog='BioTrack_app')
+    parser.add_argument('-n',
+                        '--patient_name',
+                        type=str,
+                        help='Enter Patient Name or ID.',
+                        required=True)
 
-    patient_name = 'John Doe'
-    date = '11/25/2025'
-    taxa_file = 'input_data/otu.csv'
-    alpha_file = 'results/alpha_diversity.csv'
-    beta_file = 'results/beta_diversity_coords.csv'
-    diff_file = 'results/differential_abundance_top_20.csv'
+    parser.add_argument('-t',
+                        '--taxa_file',
+                        type=str,
+                        help='Enter otu.csv path.',
+                        default='input_data/otu.csv',
+                        required=False)
 
-    taxa, alpha, beta, diff = parse_csvs(taxa_file, alpha_file, beta_file, diff_file)
+    parser.add_argument('-a',
+                        '--alpha_file',
+                        type=str,
+                        help='Enter path to alpha diversity file.',
+                        default='results/alpha_diversity.csv',
+                        required=False)
+
+    parser.add_argument('-b',
+                        '--beta_file',
+                        type=str,
+                        help='Enter path to beta diversity/PCoA file.',
+                        default='results/beta_diversity_coords.csv',
+                        required=False)
+
+    parser.add_argument('-d',
+                        '--diff_file',
+                        type=str,
+                        help='Enter path to differential abundance file.',
+                        default='results/differential_abundance_top_20.csv',
+                        required=False)
+
+    parser.add_argument('--date',
+                        type=str,
+                        help='Date of report generation, defaults to today.',
+                        default=f'{today.strftime("%m/%d/%Y")}',
+                        required=False)
+
+    args = parser.parse_args()
+
+    taxa, alpha, beta, diff = parse_csvs(args.taxa_file, args.alpha_file, args.beta_file, args.diff_file)
     id = get_patient(alpha)
     prediction = parse_rf_export('results/rf_report.txt')
-
-    create_report(date, patient_name, id, prediction, taxa, alpha, beta, diff)
+    create_report(args.date, args.patient_name, id, prediction, taxa, alpha, beta, diff)
 
 
 if __name__ == "__main__":
