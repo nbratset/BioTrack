@@ -170,7 +170,18 @@ micromamba install -c conda-forge -c bioconda bowtie2
 micromamba install -c conda-forge -c bioconda multiqc
 ```
 ## R Setup for Phyloseq
-- ???
+You need to install R and R studio.
+
+You need to make sure these packages are installed for the pipeline to run smoothly.
+
+```
+install.packages("tidyverse")
+install.packages("phyloseq")
+install.packages("ggplot2")
+install.packages("dplyr")
+install.packages("openxlsx")
+```
+
 
 ## Analysis Python Environment Setup
 ### 1. Install [micromamba](https://mamba.readthedocs.io/en/latest/installation/micromamba-installation.html)
