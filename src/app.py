@@ -79,13 +79,21 @@ def plot_alpha_diversity(df, type):
                  y='Condition',
                  color='Condition',
                  title=f'{type} Alpha Diversity Per Condition')
-    fig.update_xaxes(title_text=f'Alpha Diversity ({type})') 
+    fig.update_xaxes(title_text=f'Alpha Diversity ({type})')
     return fig
 
 
 def plot_pca(df):
     '''Plots PC1 and PC2'''
-    fig = px.scatter(df, x='PC1', y='PC2', color='Condition', color_discrete_map={'Patient': 'red', 'Healthy control': 'green', 'Ulcerative colitis':'blue', "Crohn's disease": 'purple'})
+    fig = px.scatter(df,
+                     x='PC1',
+                     y='PC2',
+                     color='Condition',
+                     color_discrete_map={
+                         'Patient': 'red',
+                         'Healthy control': 'green',
+                         'Ulcerative colitis': 'blue',
+                         "Crohn's disease": 'purple'})
     fig.data = fig.data[::-1]
     return fig
 
@@ -120,7 +128,8 @@ def generate_table(dataframe, max_rows=10):
     return table
 
 
-def create_report(date, patient_name, id, result, taxa, alpha, beta, diff, dev_mode=False):
+def create_report(date, patient_name, id, result,
+                  taxa, alpha, beta, diff, dev_mode=False):
     ''' Creates an interactive dashboard when run.
         You can access this dashboard at:
             http://127.0.0.1:8050/ (this is a local address)
@@ -140,13 +149,15 @@ def create_report(date, patient_name, id, result, taxa, alpha, beta, diff, dev_m
 
     app = Dash(__name__, external_stylesheets=[dbc.themes.FLATLY])
     app.layout = html.Div([
-        html.H5(f"Generated on {date} using BioTrack", style={'color': '#ffffff'}),
+        html.H5(f"Generated on {date} using BioTrack",
+                style={'color': '#ffffff'}),
         # Title
         html.H1("Gut Microbiome Report"),
 
         # Summary
         html.Div(html.H2("Summary")),
-        html.Div(children=[html.P(f"Patient: {patient_name} ({id})"), html.P(f"Date:{date}")]),
+        html.Div(children=[html.P(f"Patient: {patient_name} ({id})"),
+                           html.P(f"Date:{date}")]),
         html.P(f"{summary}"),
 
         # Taxa Block
@@ -164,7 +175,8 @@ def create_report(date, patient_name, id, result, taxa, alpha, beta, diff, dev_m
 
         # Diff Abundance
         html.Div(html.H2("Differential Abundance")),
-        dcc.Graph(id='Differential Abundance', figure=plot_diff_abundance(diff)),
+        dcc.Graph(id='Differential Abundance',
+                  figure=plot_diff_abundance(diff)),
 
         # Footer - Disclaimer
         html.Div(html.H2("Additional Info")),
@@ -222,10 +234,14 @@ def main():
 
     args = parser.parse_args()
 
-    taxa, alpha, beta, diff = parse_csvs(args.taxa_file, args.alpha_file, args.beta_file, args.diff_file)
+    taxa, alpha, beta, diff = parse_csvs(args.taxa_file,
+                                         args.alpha_file,
+                                         args.beta_file,
+                                         args.diff_file)
     id = get_patient(alpha)
     prediction = parse_rf_export('results/rf_report.txt')
-    create_report(args.date, args.patient_name, id, prediction, taxa, alpha, beta, diff)
+    create_report(args.date, args.patient_name, id, prediction,
+                  taxa, alpha, beta, diff)
 
 
 if __name__ == "__main__":
