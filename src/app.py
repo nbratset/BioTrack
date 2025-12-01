@@ -76,10 +76,11 @@ def plot_alpha_diversity(df, type):
     return fig
 
 
-def plot_pca(df, patient):
+def plot_pca(df):
     '''Plots PC1 and PC2'''
     df['markersize'] = 1
     fig = px.scatter(df, x='PC1', y='PC2', color='Condition', color_discrete_map={'Patient': 'red', 'Healthy control': 'green', 'Ulcerative colitis':'blue', "Crohn's disease": 'purple'}, size='markersize')
+    fig.data = fig.data[::-1]
     fig.write_html("interactive_plot.html")
     return fig
 
@@ -196,7 +197,7 @@ def main():
     # fig = plot_top_taxa(taxa, id)
     # fig = plot_alpha_diversity(alpha, 'Shannon')
     # fig = plot_alpha_diversity(alpha, 'Simpson')
-    fig = plot_pca(beta, id)
+    fig = plot_pca(beta)
     # Examples
     # fig = generate_example_fig()
     table = generate_example_table(max_rows=5)
