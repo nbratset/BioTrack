@@ -8,10 +8,14 @@ import matplotlib.pyplot as plt
 from contextlib import redirect_stdout
 import io
 
-def run_rf_multiclass(dataMatrix, class_col="var", auc_outfile=None, report_txt=None):
-    
+
+def run_rf_multiclass(dataMatrix,
+                      class_col="var",
+                      auc_outfile=None,
+                      report_txt=None):
     """
-    Train/test split (80/20) among non-patient controls, then test on Patient samples.
+    Train/test split (80/20) among non-patient controls,
+    then test on Patient samples.
     Saves ROC/AUC plot if auc_outfile is given.
     """
 
@@ -90,15 +94,16 @@ def run_rf_multiclass(dataMatrix, class_col="var", auc_outfile=None, report_txt=
         if len(best_rf.classes_) > 2:
             probs = best_rf.predict_proba(X_test)
             classes = list(best_rf.classes_)
-            colors = ["#F60239","#008607","#9400E6"]
-            auc_fig = plt.figure(figsize=(5,5))
+            colors = ["#F60239", "#008607", "#9400E6"]
+            auc_fig = plt.figure(figsize=(5, 5))
             for i, cls in enumerate(classes):
                 true_binary = (y_test == cls).astype(int)
                 pred_prob = probs[:, i]
                 fpr, tpr, _ = roc_curve(true_binary, pred_prob)
                 roc_auc = auc(fpr, tpr)
-                plt.plot(fpr, tpr, label=f"{cls} (AUC={roc_auc:.2f})", color=colors[i % len(colors)])
-            plt.plot([0,1], [0,1], 'k--')
+                plt.plot(fpr, tpr, label=f"{cls} (AUC={roc_auc:.2f})",
+                         color=colors[i % len(colors)])
+            plt.plot([0, 1], [0, 1], 'k--')
             plt.xlabel("False Positive Rate")
             plt.ylabel("True Positive Rate")
             plt.title("ROC Curves — 20% Non-Patient Test")
@@ -116,7 +121,9 @@ def run_rf_multiclass(dataMatrix, class_col="var", auc_outfile=None, report_txt=
             patient_preds = best_rf.predict(X_patient)
             print("Predictions:", list(patient_preds))
             print("\nClassification Report (patients):")
-            print(classification_report(y_patient, patient_preds, zero_division=0))
+            print(classification_report(y_patient,
+                                        patient_preds,
+                                        zero_division=0))
 
     if out_stream:
         out_stream.close()

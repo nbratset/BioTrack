@@ -2,6 +2,7 @@ import pandas as pd
 from skbio.diversity import beta_diversity
 import numpy as np
 
+
 def compute_alpha(otu_table):
     """
     Compute alpha diversity:

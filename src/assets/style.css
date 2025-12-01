@@ -10,12 +10,10 @@ body {
     margin-top: 50px;
     margin-bottom: 50px;
     background-color: #ffffff;
-    border: 1px solid #cccccc;
-    border-radius: 10px;
 }
 
 h1 {
-    font-family: "Georgia"; 
+    font-family: "Arial"; 
     color: #000000; 
     font-size: 30px;
     margin: 10px;
@@ -23,7 +21,7 @@ h1 {
 }
 
 h2 {
-    font-family: "Georgia"; 
+    font-family: "Arial"; 
     color: #000000; 
     font-size: 25px;
     margin: 10px;
@@ -31,15 +29,15 @@ h2 {
 }
 
 h3 {
-    font-family: 'Georgia';
+    font-family: 'Arial';
     color: #000000;
     font-size: 20px;
     margin: 10px;
-    text-align: center;
+    text-align: left;
 }
 
 h5 {
-    font-family: 'Georgia';
+    font-family: 'Arial';
     color: #000000;
     font-size: 12px;
     margin: 10px;
@@ -47,9 +45,10 @@ h5 {
 }
 
 p {
-    font-family: 'Georgia';
+    font-family: 'Arial';
     color: #000000;
     font-size: 15px;
     margin: 10px;
+    margin-left: 40px;
     text-align: left;
 }

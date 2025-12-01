@@ -1,9 +1,8 @@
 ![Header](src/assets/full_logo_colors.png)
 # BioTrack
 > A pipeline for the analysis of patient gut microbiome data with easy-to-read report generation.
-<!-- <img style="float: right;" src="assets/logo_b_background.png"> -->
 
-[![Version](https://img.shields.io/badge/verison-v0.0.1-red)](http://www.gnu.org/licenses/agpl-3.0)
+[![Version](https://img.shields.io/badge/verison-v1.0.0-red)](http://www.gnu.org/licenses/agpl-3.0)
 [![AGPL License](https://img.shields.io/badge/license-AGPL-blue.svg)](http://www.gnu.org/licenses/agpl-3.0)
 
 One to two paragraph statement about your product and what it does.
@@ -13,60 +12,137 @@ One to two paragraph statement about your product and what it does.
 - compare your sample to it!
 - generate a report based on this
 
+![demo](src/assets/demo.gif)
+
 # Installation
-WIP
-<!-- OS X & Linux:
+**OS X & Linux:**
 
 ```sh
-npm install my-crazy-module --save
+git clone https://github.com/nbratset/BioTrack.git
 ```
 
-Windows:
+**Windows:**
 
 ```sh
-edit autoexec.bat
-``` -->
+git clone https://github.com/nbratset/BioTrack.git
+```
 
+**Alternative:**
+> Download a ZIP of the full repository
+![zip](https://i.sstatic.net/89Oxe.png)
 
 # Usage example
+## Overview
+1. Run Nextflow Pipeline to perform metagenomic sequencing sample alignment.
+2. Build a Phyloseq object using R.
+3. Run our analysis pipeline to predict patient health status.
+4. Run our dash app which uses data from the analysis pipeline to generate an interactive report.
 
-A few motivating and useful examples of how your product can be used. Spice this up with code blocks and potentially more screenshots.
+## Step 1: Nextflow Pipeline for Patient Sample Alignment
+This first step is to take the gut microbiome patient samples and align them. This pipeline will generate a metaphlan output, which is used in later analysis.
 
-_For more examples and usage, please refer to the [Wiki][wiki]._
+1. See `Nextflow Alignment Pipeline Python Environment Setup` below to set up your python virtual environment to run this pipeline.
 
-# Development setup
+2. Once your micromamba environment it set up, download your patient data and set up your database.csv, fastq_manifest.csv, and samplesheet.csv files (found in [input_nextflow](https://github.com/nbratset/BioTrack/tree/main/input_nextflow)).
 
-Describe how to install all development dependencies and how to run an automated test-suite of some kind. Potentially do this for multiple platforms.
-<!-- 
-```sh
-make install
-npm test
-``` -->
-## Report Generation Python Environment Setup
-### 1. Install [micromamba](https://mamba.readthedocs.io/en/latest/installation/micromamba-installation.html)
-This will depend heavily on your system. For our HPC, we used the following command:
-```sh
-curl micro.mamba.pm/install.sh | bash
-```
+3. Run the nextflow pipeline either using sbatch or directly in command line:
 
-### 2. Create a virtual environment (for report generation)
-```sh
-micromamba create -n biotrack_report_env python=3.11
-```
+    - **sbatch (for HPCs)**: Modify [`run_nextflow_pipeline.sh`](https://github.com/nbratset/BioTrack/blob/main/scripts/run_nextflow_pipeline.sh) to have your proper info in the header, micromamba environment, and file paths.
 
-```sh
-micromamba activate biotrack_report_env
-```
+    - **Command Line**:
+    ```sh
+    # 1. Set up virtual python environment
+    indir=YOUR_PATH/
+    path_to_venv=YOUR_PATH/micromamba/envs/
+    micromamba activate ${path_to_venv}nextflow_env
 
-### 3. Install dependancies
-```sh
-micromamba install numpy
-micromamba install pandas
-micromamba install matplotlib
-micromamba install plotly
-micromamba install dash
-micromamba install dash_bootstrap_components
-```
+    # 2. Install host removal reference to $indir
+    curl -O https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/819/615/GCF_000819615.1_ViralProj14015/GCF_000819615.1_ViralProj14015_genomic.fna.gz
+
+    # 3. Create Metaphlan Database -- Run this if you do not have it already
+    METAPHLAN_DB_DIR=YOUR_PATH/metaphlan_db_v3
+    mkdir -p $METAPHLAN_DB_DIR
+    metaphlan --install --db_dir $METAPHLAN_DB_DIR
+
+    # 4. Run Nextflow Pipeline
+    nextflow run nf-core/taxprofiler -r 1.1.0 \
+    --input ${indir}samplesheet.csv \
+    --databases ${indir}database.csv \
+    --outdir ${indir}nextflow_results \
+    --perform_shortread_qc \
+    --perform_shortread_hostremoval \
+    --hostremoval_reference ${indir}GCF_000819615.1_ViralProj14015_genomic.fna.gz \
+    --perform_runmerging \
+    --save_runmerged_reads \
+    --run_metaphlan
+    ```
+
+4. If this runs properly, you should get a metaplan output that will be used in the next step.
+
+## Step 2: Create a Phyloseq object from Metaplan Results
+1. Download R and set up the packages in `R Setup for Phyloseq` below to run this R pipeline.
+
+2. From your base directory, move your metaplan output files into a directory called `input_data`.
+
+3. Run the following command from your base directory:
+
+    ```sh
+    Rscript src/metaphlan_to_phyloseq.R \
+    input_data/SRR5946632_pe_mpa_v31_CHOCOPhlAn_201901.metaphlan_profile.txt \
+    input_data/metadata.csv \
+    input_data/tax.csv \
+    input_data/otu.csv \
+    input_data/combined_metadata.csv
+    ```
+
+4. This creates 3 outputs: merged otu table (abundances of each taxa), merged taxonomy table (phylogeny of each taxa), and merged metadata (`combined_metadata.csv`).
+
+## Step 3: Microbiome Analysis
+1. See `Analysis Python Environment Setup` below to set up your python virtual environment to run this analysis.
+
+2. Provide your output from the R script as input arguments to the analysis pipeline.
+
+3. Run the following in your terminal:
+
+    ```sh
+    python src/run_pipeline.py \
+        --location Netherlands \
+        --otu_file input_data/otu.csv \
+        --metadata_file input_data/combined_metadata.csv
+    ```
+
+    - _Note: Location is an optional argument, if you want to limit your analysis to a particular location. If not specificed, the analysis will run on the entire data set._
+
+4. This will generate a handful of csv, png, and txt files in a folder called `results`.
+
+## Step 4: Generate an Interactive Report
+1. See `Report Generation Python Environment Setup` below to set up your python virtual environment to run this analysis.
+    - Unfortunately, scikit-bio requires a downgraded version of numpy that is not compatible with plotly/dash. Therefore this script has to run on a sepparate virtual environment.
+
+2. Provide your outputs from the analysis script above as input arguments to the analysis pipeline. If your directory structure is the same as this repo, the default arguments will work.
+
+3. Run the following in your terminal:
+
+    ```sh
+    python src/app.py \
+        -n "PATIENT NAME" \
+        -t "input_data/otu.csv" \
+        -a "results/alpha_diversity.csv" \
+        -b "results/beta_diversity_coords.csv" \
+        -d "results/differential_abundance_top_20.csv" \
+        --date "10/16/2025"
+    ```
+
+    - _Note: t, a, b, d, and date are optional arguments. The file paths in the example above are the defaults if your files are in the same locations._
+    - _Additionally, if you do not give a --date argument, it will default to the current date._
+
+4. Once the report is generated, you can access it at the local URL <http://127.0.0.1:8050/> in your browser.
+
+5. To save the report, right click on the browser output and click `Print...`. Then you can either directly print it to a Printer or Select `Save as PDF` to download to your computer.
+
+# Environment Setups
+
+The following sections describe how to install the 3 primary environment setups, 2 in python and 1 in R, required to run the full analysis. 
 
 ## Nextflow Alignment Pipeline Python Environment Setup
 ### 1. Install [micromamba](https://mamba.readthedocs.io/en/latest/installation/micromamba-installation.html)
@@ -74,6 +150,7 @@ This will depend heavily on your system. For our HPC, we used the following comm
 ```sh
 curl micro.mamba.pm/install.sh | bash
 ```
+More installation strategies can be found in the [micromamba documentation](https://mamba.readthedocs.io/en/latest/installation/micromamba-installation.html).
 
 ### 2. Create a nextflow virtual environment (for alignment pipeline)
 ```sh
@@ -92,21 +169,79 @@ micromamba install -c conda-forge -c bioconda fastp
 micromamba install -c conda-forge -c bioconda bowtie2
 micromamba install -c conda-forge -c bioconda multiqc
 ```
+## R Setup for Phyloseq
+- ???
+
+## Analysis Python Environment Setup
+### 1. Install [micromamba](https://mamba.readthedocs.io/en/latest/installation/micromamba-installation.html)
+This will depend heavily on your system. For our HPC, we used the following command:
+```sh
+curl micro.mamba.pm/install.sh | bash
+```
+
+### 2. Create a virtual environment (for report generation)
+```sh
+micromamba create -n biotrack_analysis_env python=3.10
+```
+
+```sh
+micromamba activate biotrack_analysis_env
+```
+
+### 3. Install dependancies
+```sh
+  micromamba install scipy
+  micromamba install scikit-learn
+  micromamba install scikit-bio
+  micromamba install pandas
+  micromamba install matplotlib
+  micromamba install statsmodels
+  micromamba install numpy
+  micromamba install seaborn
+  micromamba install pingouin
+  micromamba install ete3
+  micromamba install r-essentials
+  micromamba install r-base
+  micromamba install rpy2
+  micromamba install lefse
+```
+
+## Report Generation Python Environment Setup
+### 1. Install [micromamba](https://mamba.readthedocs.io/en/latest/installation/micromamba-installation.html)
+This will depend heavily on your system. For our HPC, we used the following command:
+```sh
+curl micro.mamba.pm/install.sh | bash
+```
+
+### 2. Create a virtual environment (for report generation)
+```sh
+micromamba create -n biotrack_report_env python=3.12
+```
+
+```sh
+micromamba activate biotrack_report_env
+```
+
+### 3. Install dependancies
+```sh
+micromamba install numpy
+micromamba install pandas
+micromamba install plotly
+micromamba install dash
+micromamba install dash_bootstrap_components
+```
 
 # Release History
-
-<!-- * 0.2.1
-    * CHANGE: Update docs (module code remains unchanged)
-* 0.2.0
-    * CHANGE: Remove `setDefaultXYZ()`
-    * ADD: Add `init()`
-* 0.1.1
-    * FIX: Crash when calling `baz()` (Thanks @GenerousContributorName!)
-* 0.1.0
+* 1.0.0
     * The first proper release
-    * CHANGE: Rename `foo()` to `bar()` -->
+    * 12/02/2025
 * 0.0.1
     * Work in progress
+
+# Data Information and Model Processing
+We downloaded 3 studies ([PRJNA945504](https://www.ncbi.nlm.nih.gov/bioproject/?term=PRJNA945504), [PRJNA398089](https://www.ncbi.nlm.nih.gov/bioproject/398089), [PRJNA400072](https://www.ncbi.nlm.nih.gov/bioproject/400072)) of microbiome data totalling to 2,034 samples with our script [`run_download_fastqs.sh`](https://github.com/nbratset/BioTrack/blob/main/scripts/run_download_fastqs.sh).
+
+We used these samples with scikit.learn to train a model to differentiate patients who are healthy, have Ulcerative Colitis, or Crohn's disease. (file path to these processed data?)
 
 # Creators
 Arya Gautam – [Linkedin](https://www.linkedin.com/in/arya-gautam-a9a125204/) – [CU Profile](https://www.colorado.edu/certificate/iqbiology/natalie-marie-bratset)
@@ -123,20 +258,3 @@ We would like to thank CU Boulder's IQ Biology Program, BioFrontiers, and the NS
 We would also like to thank CU Boulder's [Biofrontiers IT Team (BIT)](https://bit.colorado.edu/) for allowing us to use their Fiji Computing Cluster, and for many emails and meetings of troubleshooting.
 
 DISCLAIMER: This project, code, and reports generated do not provide medical advice. The information generated in the report is intended to be reviewed by a medical professional and cannot independently provide medical diagnoses. Always seek the advice of your physician or medical health provider for an official diagnosis and treatment information.
-
-
-<!-- ## Contributing
-
-1. Fork it (<https://github.com/yourname/yourproject/fork>)
-2. Create your feature branch (`git checkout -b feature/fooBar`)
-3. Commit your changes (`git commit -am 'Add some fooBar'`)
-4. Push to the branch (`git push origin feature/fooBar`)
-5. Create a new Pull Request
-
-<!-- Markdown link & img dfn's -->
-<!-- [npm-image]: https://img.shields.io/npm/v/datadog-metrics.svg?style=flat-square
-[npm-url]: https://npmjs.org/package/datadog-metrics
-[npm-downloads]: https://img.shields.io/npm/dm/datadog-metrics.svg?style=flat-square
-[travis-image]: https://img.shields.io/travis/dbader/node-datadog-metrics/master.svg?style=flat-square
-[travis-url]: https://travis-ci.org/dbader/node-datadog-metrics
-[wiki]: https://github.com/yourname/yourproject/wiki -->
