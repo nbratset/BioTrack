@@ -16,6 +16,18 @@ def compute_alpha(otu_table):
         values = counts or relative abundances
     """
 
+    ##Error handling###
+    if otu_table is None:
+        raise ValueError("OTU table not provided.")
+    
+    if otu_table.isna().any().any():
+        raise ValueError("OTU table contains missing values.")
+
+    if not np.issubdtype(otu_table.dtypes.values[0], np.number):
+        raise ValueError("OTU table must contain numeric values only.")
+    
+    #####
+
     # ---- Alpha metric functions ----
     def shannon(counts):
         total = counts.sum()
@@ -45,15 +57,28 @@ def compute_alpha(otu_table):
     return results
 
 
-def compute_beta(feature_table):
+def compute_beta(otu_table):
     """
     Compute Bray-Curtis beta diversity distance matrix
     feature_table: pandas DataFrame, samples as rows, OTUs as columns
     Returns: skbio DistanceMatrix
     """
+
+    ##Error handling###
+    if otu_table is None:
+        raise ValueError("OTU table not provided.")
+    
+    if otu_table.isna().any().any():
+        raise ValueError("OTU table contains missing values.")
+    
+    if not np.issubdtype(otu_table.dtypes.values[0], np.number):
+        raise ValueError("OTU table must contain numeric values only.")
+    
+    #####
+    
     beta = beta_diversity(
         metric="braycurtis",
-        counts=feature_table.values,  # samples are rows
-        ids=feature_table.index
+        counts=otu_table.values,  # samples are rows
+        ids=otu_table.index
     )
     return beta

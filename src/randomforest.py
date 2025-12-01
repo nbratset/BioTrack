@@ -19,6 +19,31 @@ def run_rf_multiclass(dataMatrix,
     Saves ROC/AUC plot if auc_outfile is given.
     """
 
+    ##Error handling###
+    if class_col not in dataMatrix.columns:
+        raise ValueError(f"Column '{class_col}' not found in dataMatrix.")
+
+    if dataMatrix.empty:
+        raise ValueError("dataMatrix is empty. Check that your input table and metadata were provided.")
+
+    if dataMatrix[class_col].isna().any():
+        raise ValueError("Missing values detected in class_col.")
+
+    if dataMatrix.drop(columns=[class_col]).isna().any().any():
+        raise ValueError("OTU table contains missing values.")
+
+    if "Patient" not in dataMatrix[class_col].unique():
+        raise ValueError("Class column must contain 'Patient' for this analysis.")
+
+    non_patient_df = dataMatrix[dataMatrix[class_col] != "Patient"]
+    if non_patient_df.empty:
+        raise ValueError("No non-patient samples available for model training.")
+
+    if non_patient_df[class_col].nunique() < 2:
+        raise ValueError(
+            "Need at least two non-patient classes for stratified train/test split."
+        )
+    ##################
     buffer = io.StringIO()
     out_stream = open(report_txt, "w") if report_txt else None
     target = out_stream if out_stream else buffer

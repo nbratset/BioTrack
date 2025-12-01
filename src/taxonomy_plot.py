@@ -1,6 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import numpy as np
 
 
 def barplot_taxa_facet_fill(otu_table, taxonomy_series, metadata,
@@ -19,6 +20,30 @@ def barplot_taxa_facet_fill(otu_table, taxonomy_series, metadata,
         top_n: Number of top taxa to show (others merged as 'Other')
         out_file: Optional output path for the figure
     """
+
+    ##Error handling##
+    if otu_table is None:
+        raise ValueError("OTU table not provided.")
+    
+    if taxonomy_series is None:
+        raise ValueError("Taxonomy table not provided.")
+    
+    if metadata is None:
+        raise ValueError("Metadata not provided.")
+    
+    if otu_table.isna().any().any():
+        raise ValueError("OTU table contains missing values.")
+
+    if not np.issubdtype(otu_table.dtypes.values[0], np.number):
+        raise ValueError("OTU table must contain numeric values only.")
+    
+    required_ranks = ["Phylum", "Class", "Order", "Family", "Genus", "Species"]
+    missing = [rank for rank in required_ranks if rank not in taxonomy_series.columns]
+    if missing:
+        raise ValueError(f"Taxonomy table is missing required taxonomic ranks: {', '.join(missing)}")
+    
+    ######
+
     # Parse taxonomy
     taxa_df = taxonomy_series.str.split(";", expand=True)
     taxa_df.columns = ["K", "P", "C", "O", "F", "G", "S"]

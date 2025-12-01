@@ -194,7 +194,6 @@ plt.close()
 # Random Forest
 dataMatrix = otu.copy()
 dataMatrix["Condition"] = metadata["Condition"]
-
 cols = ["Condition"] + [c for c in dataMatrix.columns if c != "Condition"]
 dataMatrix = dataMatrix[cols]
 
