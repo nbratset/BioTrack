@@ -17,8 +17,6 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("--otu", required=True)
 parser.add_argument("--meta", required=True)
-parser.add_argument("-r", "--report", default=False, required=False)
-parser.add_argument("-p", "--pateint_id", type=str, required=False)
 args = parser.parse_args()
 
 # Load data
