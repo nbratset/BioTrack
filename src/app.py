@@ -76,9 +76,12 @@ def plot_alpha_diversity(df, type):
     return fig
 
 
-def plot_pca():
-    # plots PCA 1 and 2 from beta_div_coords file
-    pass
+def plot_pca(df, patient):
+    '''Plots PC1 and PC2'''
+    df['markersize'] = 1
+    fig = px.scatter(df, x='PC1', y='PC2', color='Condition', color_discrete_map={'Patient': 'red', 'Healthy control': 'green', 'Ulcerative colitis':'blue', "Crohn's disease": 'purple'}, size='markersize')
+    fig.write_html("interactive_plot.html")
+    return fig
 
 
 def plot_diff_abundance():
@@ -187,11 +190,13 @@ def main():
     beta_file = 'results/beta_diversity_coords.csv'
 
     taxa, alpha, beta = parse_csvs(taxa_file, alpha_file, beta_file)
-    prediction = parse_rf_export('results/rf_report.txt')
     id = get_patient(alpha)
-    fig = plot_top_taxa(taxa, id)
-    fig = plot_alpha_diversity(alpha, 'Shannon')
-    fig = plot_alpha_diversity(alpha, 'Simpson')
+    prediction = parse_rf_export('results/rf_report.txt')
+
+    # fig = plot_top_taxa(taxa, id)
+    # fig = plot_alpha_diversity(alpha, 'Shannon')
+    # fig = plot_alpha_diversity(alpha, 'Simpson')
+    fig = plot_pca(beta, id)
     # Examples
     # fig = generate_example_fig()
     table = generate_example_table(max_rows=5)
