@@ -21,13 +21,13 @@ class TestReport(unittest.TestCase):
         beta_file = 'results/beta_diversity_coords.csv'
         df1, df2, df3 = app.parse_csvs(taxa_file, alpha_file, beta_file)
         self.assertEqual()  # ??
-    
+
     def test_import_errors(self):
         taxa_file = 'input_data/otu.csv'
         alpha_file = 'results/alpha_diversity.csv'
         beta_file = 'results/beta_diversity_coords.csv'
         df1, df2, df3 = app.parse_csvs(taxa_file, alpha_file, beta_file)
-        # I'll test for sys.exit(0) here if you have a bad file. 
+        # I'll test for sys.exit(0) here if you have a bad file.
 
     def test_get_patient(self):
         alpha_file = 'results/alpha_diversity.csv'
@@ -37,8 +37,9 @@ class TestReport(unittest.TestCase):
 
     def test_parse_rf(self):
         # I want this to parse the rf file for the patient prediction
-        self.assertEqual(app.parse_rf_export('rf_report.txt'), 'Healthy Control')
-    
+        self.assertEqual(app.parse_rf_export('rf_report.txt'),
+                         'Healthy Control')
+
     def test_parse_rf_errors(self):
         # test if the file exists/is empty
         # I want sys.exit(0) for controlled errors
