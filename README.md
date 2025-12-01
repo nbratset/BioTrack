@@ -2,7 +2,7 @@
 # BioTrack
 > A pipeline for the analysis of patient gut microbiome data with easy-to-read report generation.
 
-[![Version](https://img.shields.io/badge/verison-v0.0.1-red)](http://www.gnu.org/licenses/agpl-3.0)
+[![Version](https://img.shields.io/badge/verison-v1.0.0-red)](http://www.gnu.org/licenses/agpl-3.0)
 [![AGPL License](https://img.shields.io/badge/license-AGPL-blue.svg)](http://www.gnu.org/licenses/agpl-3.0)
 
 One to two paragraph statement about your product and what it does.
@@ -12,6 +12,7 @@ One to two paragraph statement about your product and what it does.
 - compare your sample to it!
 - generate a report based on this
 
+![demo](src/assets/demo.gif)
 
 # Installation
 **OS X & Linux:**
@@ -32,7 +33,10 @@ git clone https://github.com/nbratset/BioTrack.git
 
 # Usage example
 ## Overview
-- maybe a flow diagram of how this works? to make it easier to follow?
+1. Run Nextflow Pipeline to perform metagenomic sequencing sample alignment.
+2. Build a Phyloseq object using R.
+3. Run our analysis pipeline to predict patient health status.
+4. Run our dash app which uses data from the analysis pipeline to generate an interactive report.
 
 ## Step 1: Nextflow Pipeline for Patient Sample Alignment
 This first step is to take the gut microbiome patient samples and align them. This pipeline will generate a metaphlan output, which is used in later analysis.
@@ -94,7 +98,7 @@ This first step is to take the gut microbiome patient samples and align them. Th
 4. This creates 3 outputs: merged otu table (abundances of each taxa), merged taxonomy table (phylogeny of each taxa), and merged metadata (`combined_metadata.csv`).
 
 ## Step 3: Microbiome Analysis
-1. See `Full Analysis and Report Generation Python Environment Setup` below to set up your python virtual environment to run this analysis.
+1. See `Analysis Python Environment Setup` below to set up your python virtual environment to run this analysis.
 
 2. Provide your output from the R script as input arguments to the analysis pipeline.
 
@@ -109,7 +113,30 @@ This first step is to take the gut microbiome patient samples and align them. Th
 
     - _Note: Location is an optional argument, if you want to limit your analysis to a particular location. If not specificed, the analysis will run on the entire data set._
 
-4. Once the report is generated, you can access it at the local URL <> in your browser.
+4. This will generate a handful of csv, png, and txt files in a folder called `results`.
+
+## Step 4: Generate an Interactive Report
+1. See `Report Generation Python Environment Setup` below to set up your python virtual environment to run this analysis.
+    - Unfortunately, scikit-bio requires a downgraded version of numpy that is not compatible with plotly/dash. Therefore this script has to run on a sepparate virtual environment.
+
+2. Provide your outputs from the analysis script above as input arguments to the analysis pipeline. If your directory structure is the same as this repo, the default arguments will work.
+
+3. Run the following in your terminal:
+
+    ```sh
+    python src/app.py \
+        -n "PATIENT NAME" \
+        -t "input_data/otu.csv" \
+        -a "results/alpha_diversity.csv" \
+        -b "results/beta_diversity_coords.csv" \
+        -d "results/differential_abundance_top_20.csv" \
+        --date "10/16/2025"
+    ```
+
+    - _Note: t, a, b, d, and date are optional arguments. The file paths in the example above are the defaults if your files are in the same locations._
+    - _Additionally, if you do not give a --date argument, it will default to the current date._
+
+4. Once the report is generated, you can access it at the local URL <http://127.0.0.1:8050/> in your browser.
 
 5. To save the report, right click on the browser output and click `Print...`. Then you can either directly print it to a Printer or Select `Save as PDF` to download to your computer.
 
@@ -145,7 +172,7 @@ micromamba install -c conda-forge -c bioconda multiqc
 ## R Setup for Phyloseq
 - ???
 
-## Full Analysis and Report Generation Python Environment Setup
+## Analysis Python Environment Setup
 ### 1. Install [micromamba](https://mamba.readthedocs.io/en/latest/installation/micromamba-installation.html)
 This will depend heavily on your system. For our HPC, we used the following command:
 ```sh
@@ -154,7 +181,41 @@ curl micro.mamba.pm/install.sh | bash
 
 ### 2. Create a virtual environment (for report generation)
 ```sh
-micromamba create -n biotrack_report_env python=3.11
+micromamba create -n biotrack_analysis_env python=3.10
+```
+
+```sh
+micromamba activate biotrack_analysis_env
+```
+
+### 3. Install dependancies
+```sh
+  micromamba install scipy
+  micromamba install scikit-learn
+  micromamba install scikit-bio
+  micromamba install pandas
+  micromamba install matplotlib
+  micromamba install statsmodels
+  micromamba install numpy
+  micromamba install seaborn
+  micromamba install pingouin
+  micromamba install ete3
+  micromamba install r-essentials
+  micromamba install r-base
+  micromamba install rpy2
+  micromamba install lefse
+```
+
+## Report Generation Python Environment Setup
+### 1. Install [micromamba](https://mamba.readthedocs.io/en/latest/installation/micromamba-installation.html)
+This will depend heavily on your system. For our HPC, we used the following command:
+```sh
+curl micro.mamba.pm/install.sh | bash
+```
+
+### 2. Create a virtual environment (for report generation)
+```sh
+micromamba create -n biotrack_report_env python=3.12
 ```
 
 ```sh
@@ -165,23 +226,15 @@ micromamba activate biotrack_report_env
 ```sh
 micromamba install numpy
 micromamba install pandas
-micromamba install matplotlib
 micromamba install plotly
 micromamba install dash
 micromamba install dash_bootstrap_components
 ```
 
 # Release History
-<!-- * 0.2.1
-    * CHANGE: Update docs (module code remains unchanged)
-* 0.2.0
-    * CHANGE: Remove `setDefaultXYZ()`
-    * ADD: Add `init()`
-* 0.1.1
-    * FIX: Crash when calling `baz()` (Thanks @GenerousContributorName!)
-* 0.1.0
+* 1.0.0
     * The first proper release
-    * CHANGE: Rename `foo()` to `bar()` -->
+    * 12/02/2025
 * 0.0.1
     * Work in progress
 
