@@ -64,9 +64,16 @@ def plot_top_taxa(df, patient):
     return fig
 
 
-def plot_alpha_diversity():
-    # plots shannon and richness a div
-    pass
+def plot_alpha_diversity(df, type):
+    '''Plots a boxplot of alpha diversity.
+       You can choose between Shannon or Simpson with the type variable.'''
+    fig = px.box(df,
+                 x=type,
+                 y='Condition',
+                 color='Condition',
+                 title=f'{type} Alpha Diversity Per Condition')
+    fig.update_xaxes(title_text=f'Alpha Diversity ({type})') 
+    return fig
 
 
 def plot_pca():
@@ -182,11 +189,14 @@ def main():
     taxa, alpha, beta = parse_csvs(taxa_file, alpha_file, beta_file)
     prediction = parse_rf_export('results/rf_report.txt')
     id = get_patient(alpha)
-    fig =plot_top_taxa(taxa, id)
+    fig = plot_top_taxa(taxa, id)
+    fig = plot_alpha_diversity(alpha, 'Shannon')
+    fig = plot_alpha_diversity(alpha, 'Simpson')
+    # Examples
     # fig = generate_example_fig()
     table = generate_example_table(max_rows=5)
 
-    create_report(date, patient_id, [fig, table], dev_mode=True)
+    # create_report(date, patient_id, [fig, table], dev_mode=True)
 
 
 if __name__ == "__main__":
