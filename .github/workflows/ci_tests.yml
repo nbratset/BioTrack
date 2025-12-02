@@ -27,3 +27,15 @@ jobs:
       - run: micromamba run -n biotrack pip install dash_bootstrap_components
       - run: python test/unit/report_unit_test.py
         shell: bash -l {0}
+  run_report_func_test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Micromamba Environment
+        uses: mamba-org/setup-micromamba@v2
+        with:
+          environment-file: environment.yml
+          init-shell: bash
+      - run: micromamba run -n biotrack pip install dash_bootstrap_components
+      - run: bash test/func/test_pipeline.sh
+        shell: bash -l {0}
