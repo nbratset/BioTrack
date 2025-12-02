@@ -13,6 +13,7 @@ import randomforest
 import diversity
 import taxonomy_plot
 
+
 class TestAnalysis(unittest.TestCase):
     """Unit tests for functions used in main.py"""
     def setUp(self):
@@ -40,14 +41,13 @@ class TestAnalysis(unittest.TestCase):
         df = diversity.compute_alpha(self.otu_table)
         # checks whether all samples are retained
         self.assertListEqual(list(df.index), ["sample1", "sample2", "sample3"])
-        # checks whether richness is calulcated correctly- positive test case 
+        # checks whether richness is calulcated correctly- positive test case
         self.assertEqual(df.loc["sample1", "Observed"], 3)
         # checks whether richness is calulcated correctly- negative test case
         self.assertNotEqual(df.loc["sample2", "Observed"], 0)
-        # checks for logic because Shannon and Simpson are always less than observed
+        # checks for logic because Shannon and Simpson are always < observed
         self.assertTrue(df.loc["sample2",
                                "Observed"] > df.loc["sample2", "Shannon"])
-        # checks for logic because Shannon and Simpson are always less than observed
         self.assertTrue(df.loc["sample2",
                                "Simpson"] < df.loc["sample2", "Observed"])
         # checks it's a finite number for all 3 samples
@@ -56,7 +56,7 @@ class TestAnalysis(unittest.TestCase):
         self.assertTrue(np.isfinite(df["Simpson"]).all())
 
         with self.assertRaises(ValueError) as error:
-           df2 = diversity.compute_alpha()
+            df2 = diversity.compute_alpha()
         # checks if the error in raised if OTU table is not passed correctly
         self.assertIn("OTU table not provided.", str(error.exception))
 
@@ -72,7 +72,7 @@ class TestAnalysis(unittest.TestCase):
             self.assertAlmostEqual(dist[i, i], 0.0, places=6)
 
         with self.assertRaises(ValueError) as error:
-           dist2 = diversity.compute_beta()
+            dist2 = diversity.compute_beta()
         # checks if the error in raised if OTU table is not passed correctly
         self.assertIn("OTU table not provided.", str(error.exception))
 
@@ -99,7 +99,7 @@ class TestAnalysis(unittest.TestCase):
             "OTU1": "K;P;C;O;F;S",
             "OTU2": "K;P;C;O;F;S",
             "OTU3": "K;P;C;O;F;S",
-            "OTU4": "K;P;C;O;F;S",})
+            "OTU4": "K;P;C;O;F;S"})
         with self.assertRaises(ValueError) as error2:
             taxonomy_plot.barplot_taxa_facet_fill(self.otu_table,
                                                   taxa_table,
@@ -110,7 +110,7 @@ class TestAnalysis(unittest.TestCase):
         # checks if the format of the taxonomy_series is valid
         self.assertIn("Taxonomy table is missing required taxonomic ranks: Genus",  # noqa
                       str(error2.exception))
- 
+
     def test_random_forest(self):
         dataMatrix = self.otu_table.copy()
         dataMatrix["Condition"] = self.metadata_table["Condition"]
