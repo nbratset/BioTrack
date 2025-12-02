@@ -6,5 +6,5 @@ dependencies:
   - numpy>=1.26.4
   - pycodestyle>=2.14
   - pandas>=2.3.3
-  - dash
-  - plotly
+  - dash>=3.2.0
+  - plotly>=6.5.0
