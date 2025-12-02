@@ -16,16 +16,16 @@ def compute_alpha(otu_table):
         values = counts or relative abundances
     """
 
-    ##Error handling###
+    # Error handling###
     if otu_table is None:
         raise ValueError("OTU table not provided.")
-    
+
     if otu_table.isna().any().any():
         raise ValueError("OTU table contains missing values.")
 
     if not np.issubdtype(otu_table.dtypes.values[0], np.number):
         raise ValueError("OTU table must contain numeric values only.")
-    
+
     #####
 
     # ---- Alpha metric functions ----
@@ -64,18 +64,18 @@ def compute_beta(otu_table):
     Returns: skbio DistanceMatrix
     """
 
-    ##Error handling###
+    # Error handling###
     if otu_table is None:
         raise ValueError("OTU table not provided.")
-    
+
     if otu_table.isna().any().any():
         raise ValueError("OTU table contains missing values.")
-    
+
     if not np.issubdtype(otu_table.dtypes.values[0], np.number):
         raise ValueError("OTU table must contain numeric values only.")
-    
+
     #####
-    
+
     beta = beta_diversity(
         metric="braycurtis",
         counts=otu_table.values,  # samples are rows

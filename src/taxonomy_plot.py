@@ -21,27 +21,27 @@ def barplot_taxa_facet_fill(otu_table, taxonomy_series, metadata,
         out_file: Optional output path for the figure
     """
 
-    ##Error handling##
+    # Error handling##
     if otu_table is None:
         raise ValueError("OTU table not provided.")
-    
+
     if taxonomy_series is None:
         raise ValueError("Taxonomy table not provided.")
-    
+
     if metadata is None:
         raise ValueError("Metadata not provided.")
-    
+
     if otu_table.isna().any().any():
         raise ValueError("OTU table contains missing values.")
 
     if not np.issubdtype(otu_table.dtypes.values[0], np.number):
         raise ValueError("OTU table must contain numeric values only.")
-    
+
     required_ranks = ["Phylum", "Class", "Order", "Family", "Genus", "Species"]
-    missing = [rank for rank in required_ranks if rank not in taxonomy_series.columns]
+    missing = [rank for rank in required_ranks if rank not in taxonomy_series.columns]  # noqa
     if missing:
-        raise ValueError(f"Taxonomy table is missing required taxonomic ranks: {', '.join(missing)}")
-    
+        raise ValueError(f"Taxonomy table is missing required taxonomic ranks: {', '.join(missing)}")  # noqa
+
     ######
 
     # Parse taxonomy

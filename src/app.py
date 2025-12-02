@@ -35,12 +35,16 @@ def parse_csvs(taxa_otu_file, alpha_div_file, beta_pcoa_file, diff_file):
 def parse_rf_export(rf_file):
     prediction = ''
     line_list = []
-    with open(rf_file, 'r', encoding='utf-8') as file:
-        for line in file:
-            line_list.append(line)
-            split = line.strip().split("'")
-            if 'Predictions: [' in split:
-                prediction = split[1]
+    try:
+        file = open(rf_file, 'r', encoding='utf-8')
+    except FileNotFoundError as e:
+        print('Cannot find RF_report File!')
+        sys.exit(0)
+    for line in file:
+        line_list.append(line)
+        split = line.strip().split("'")
+        if 'Predictions: [' in split:
+            prediction = split[1]
     if prediction == '':
         print(f'Cannot find prediction in {rf_file}')
     else:
