@@ -1,0 +1,12 @@
+statsmodels
+scipy
+seaborn
+matplotlib
+pandas
+scikit-learn
+pingouin
+scikit-bio
+ete3
+numpy
+lefse
+rpy2

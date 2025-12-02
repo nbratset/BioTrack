@@ -203,6 +203,12 @@ micromamba activate biotrack_analysis_env
 ```
 
 ### 3. Install dependancies
+#### Option 1: Using a  `analysis_requirements.txt`
+```sh
+pip install -r analysis_requirements.txt
+```
+
+#### Option 2: Manual Installation
 ```sh
   micromamba install scipy
   micromamba install scikit-learn
