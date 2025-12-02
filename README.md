@@ -109,7 +109,7 @@ This first step is to take the gut microbiome patient samples and align them. Th
 
     ```sh
     python src/run_pipeline.py \
-        --location Netherlands \
+        --location USA \
         --otu_file input_data/otu.csv \
         --metadata_file input_data/combined_metadata.csv
     ```
