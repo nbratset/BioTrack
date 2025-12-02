@@ -32,8 +32,8 @@ def run_rf_multiclass(dataMatrix,
     if dataMatrix.drop(columns=[class_col]).isna().any().any():
         raise ValueError("OTU table contains missing values.")
 
-    # if "Patient" not in dataMatrix[class_col].unique():
-    #     raise ValueError("Class column must contain 'Patient' for this analysis.")  # noqa
+    if "Patient" not in dataMatrix[class_col].unique():
+        raise ValueError("Class column must contain 'Patient' for this analysis.")  # noqa
 
     non_patient_df = dataMatrix[dataMatrix[class_col] != "Patient"]
     if non_patient_df.empty:

@@ -37,13 +37,6 @@ def barplot_taxa_facet_fill(otu_table, taxonomy_series, metadata,
     if not np.issubdtype(otu_table.dtypes.values[0], np.number):
         raise ValueError("OTU table must contain numeric values only.")
 
-    # required_ranks = ["Phylum", "Class", "Order", "Family", "Genus", "Species"]  # noqa
-    # missing = [rank for rank in required_ranks if rank not in taxonomy_series.index]  # noqa
-    # if missing:
-    #     raise ValueError(f"Taxonomy table is missing required taxonomic ranks: {', '.join(missing)}")  # noqa
-
-    ######
-
     # Parse taxonomy
     taxa_df = taxonomy_series.str.split(";", expand=True)
     taxa_df.columns = ["K", "P", "C", "O", "F", "G", "S"]
