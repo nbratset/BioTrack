@@ -42,7 +42,7 @@ This first step is to take the gut microbiome patient samples and align them. Th
 
 1. See `Nextflow Alignment Pipeline Python Environment Setup` below to set up your python virtual environment to run this pipeline.
 
-2. Once your micromamba environment it set up, download your patient data and set up your database.csv, fastq_manifest.csv, and samplesheet.csv files (found in [input_nextflow](https://github.com/nbratset/BioTrack/tree/main/input_nextflow)).
+2. Once your micromamba environment it set up, download your patient data and set up your database.csv and samplesheet.csv files (found in [input_nextflow](https://github.com/nbratset/BioTrack/tree/main/input_nextflow)).
 
 3. Run the nextflow pipeline either using sbatch or directly in command line:
 
