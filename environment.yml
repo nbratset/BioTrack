@@ -8,4 +8,3 @@ dependencies:
   - pandas>=2.3.3
   - dash
   - plotly
-  - dash_bootstrap_components

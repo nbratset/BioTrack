@@ -15,35 +15,6 @@ jobs:
           init-shell: bash
       - run: pycodestyle $(git ls-files "*.py")
         shell: bash -l {0}
-  # run_unit_test:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - name: Setup Micromamba Environment
-  #       uses: mamba-org/setup-micromamba@v2
-  #       with:
-  #         environment-file: environment.yml
-  #         init-shell: bash
-  #     - name: Run Unit Tests
-  #       run: python test/unit/test_fire_gdp.py
-  #       shell: bash -l {0}
-  # run_pipeline_func_test:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - name: Setup Micromamba Environment
-  #       uses: mamba-org/setup-micromamba@v2
-  #       with:
-  #         environment-file: env.yml
-  #         init-shell: bash
-  #     - name: Grant read permission to co2 test data
-  #       run: chmod +r tiny_sample_emission.csv
-  #     - name: Grant read permission to gdp test data
-  #       run: chmod +r tiny_sample_gdp.csv
-  #     - name: Grant execute permission for fire_gdp.py
-  #       run: chmod +x src/fire_gdp.py
-  #     - run: bash test/func/test_pipeline.sh
-  #       shell: bash -l {0}
   run_report_unit_test:
     runs-on: ubuntu-latest
     steps:
@@ -53,11 +24,6 @@ jobs:
         with:
           environment-file: environment.yml
           init-shell: bash
-      # - name: Grant read permission to co2 test data
-      #   run: chmod +r tiny_sample_emission.csv
-      # - name: Grant read permission to gdp test data
-      #   run: chmod +r tiny_sample_gdp.csv
-      # - name: Grant execute permission for fire_gdp.py
-      #   run: chmod +x src/fire_gdp.py
+      - run: pip install dash_bootstrap_components
       - run: bash test/unit/report_unit_test.sh
         shell: bash -l {0}
