@@ -5,5 +5,7 @@ channels:
 dependencies:
   - numpy>=1.26.4
   - pycodestyle>=2.14
-  - matplotlib>=3.10
   - pandas>=2.3.3
+  - dash
+  - plotly
+  - dash_bootstrap_components
