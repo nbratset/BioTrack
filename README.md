@@ -195,7 +195,7 @@ curl micro.mamba.pm/install.sh | bash
 
 ### 2. Create a virtual environment (for report generation)
 ```sh
-micromamba create -n biotrack_analysis_env python=3.10
+micromamba create -n biotrack_analysis_env python=3.11
 ```
 
 ```sh
@@ -243,6 +243,12 @@ micromamba activate biotrack_report_env
 ```
 
 ### 3. Install dependancies
+#### Option 1: Using  `report_requirements.txt`
+```sh
+pip install -r report_requirements.txt
+```
+
+#### Option 2: Manual Installation
 ```sh
 micromamba install numpy
 micromamba install pandas
@@ -250,6 +256,7 @@ micromamba install plotly
 micromamba install dash
 micromamba install dash_bootstrap_components
 ```
+Note: I have had installation errors with `micromamba install dash_bootstrap_components`, and usually fixed those errors by running `pip install dash_bootstrap_components` instead.
 
 # Release History
 * 1.0.0
