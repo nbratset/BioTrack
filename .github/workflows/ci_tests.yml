@@ -25,5 +25,6 @@ jobs:
           environment-file: environment.yml
           init-shell: bash
       - run: pip install dash_bootstrap_components
-      - run: bash test/unit/report_unit_test.sh
+      - run: pwd
+      - run: python test/unit/report_unit_test.py
         shell: bash -l {0}
