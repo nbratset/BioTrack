@@ -203,7 +203,7 @@ micromamba activate biotrack_analysis_env
 ```
 
 ### 3. Install dependancies
-#### Option 1: Using a  `analysis_requirements.txt`
+#### Option 1: Using  `analysis_requirements.txt`
 ```sh
 pip install -r analysis_requirements.txt
 ```
