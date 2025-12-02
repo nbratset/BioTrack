@@ -23,22 +23,22 @@ class TestReport(unittest.TestCase):
                                          alpha_file,
                                          beta_file,
                                          diff_file),
-                                        'Missing Taxa/OTU File')
+                         'Missing Taxa/OTU File')
         self.assertEqual(app.get_patient(taxa_file,
                                          'bad.csv',
                                          beta_file,
                                          diff_file),
-                                        'Missing alpha diversity File')
+                         'Missing alpha diversity File')
         self.assertEqual(app.get_patient(taxa_file,
                                          alpha_file,
                                          'bad.csv',
                                          diff_file),
-                                        'Missing beta diversity File')
+                         'Missing beta diversity File')
         self.assertEqual(app.get_patient(taxa_file,
                                          alpha_file,
                                          beta_file,
                                          'bad.csv'),
-                                        'Missing Differential Abundance File')  # noqa
+                         'Missing Differential Abundance File')  # noqa
 
     def test_get_patient(self):
         alpha_file = 'results/alpha_diversity.csv'
