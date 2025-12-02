@@ -5,12 +5,9 @@
 [![Version](https://img.shields.io/badge/verison-v1.0.0-red)](http://www.gnu.org/licenses/agpl-3.0)
 [![AGPL License](https://img.shields.io/badge/license-AGPL-blue.svg)](http://www.gnu.org/licenses/agpl-3.0)
 
-One to two paragraph statement about your product and what it does.
-- has a sample nextflow alignment script
-- we ran this on x samples
-- ML to determine: association of patient health to gut biome
-- compare your sample to it!
-- generate a report based on this
+BioTrack is a multi-software program that combines nextflow microbiome alignment, to both R and python processing scripts. The goal of this software is to make these sepparate tools more accessable and generate the most streamlined experience for the user. Additionally, performing our analysis pipeline will allow you to compare a patient's gut microbiome data to over 2,000 samples and generate a predicted health outcome (healthy, ulcerative colitis, or crohn's disease).
+
+Additionally, you can run our report software (step #4) to generate an interactive report of the patient's data that can be printed:
 
 ![demo](src/assets/demo.gif)
 
@@ -28,8 +25,10 @@ git clone https://github.com/nbratset/BioTrack.git
 ```
 
 **Alternative:**
-> Download a ZIP of the full repository
-![zip](https://i.sstatic.net/89Oxe.png)
+
+Download a ZIP of the full repository:
+
+> ![zip](https://i.sstatic.net/89Oxe.png)
 
 # Usage example
 ## Overview
@@ -84,7 +83,11 @@ This first step is to take the gut microbiome patient samples and align them. Th
 
 2. From your base directory, move your metaplan output files into a directory called `input_data`.
 
-3. Run the following command from your base directory:
+3. Set up your metadata file to include the patient as shown below:
+
+    ![metadata](src/assets/metadata_example.jpg)
+
+4. Run the following command from your base directory:
 
     ```sh
     Rscript src/metaphlan_to_phyloseq.R \
@@ -95,7 +98,7 @@ This first step is to take the gut microbiome patient samples and align them. Th
     input_data/combined_metadata.csv
     ```
 
-4. This creates 3 outputs: merged otu table (abundances of each taxa), merged taxonomy table (phylogeny of each taxa), and merged metadata (`combined_metadata.csv`).
+5. This creates 3 outputs: merged otu table (abundances of each taxa), merged taxonomy table (phylogeny of each taxa), and merged metadata (`combined_metadata.csv`).
 
 ## Step 3: Microbiome Analysis
 1. See `Analysis Python Environment Setup` below to set up your python virtual environment to run this analysis.
@@ -174,7 +177,7 @@ You need to install R and R studio.
 
 You need to make sure these packages are installed for the pipeline to run smoothly.
 
-```
+```R
 install.packages("tidyverse")
 install.packages("phyloseq")
 install.packages("ggplot2")
