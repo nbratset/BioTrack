@@ -37,10 +37,10 @@ def barplot_taxa_facet_fill(otu_table, taxonomy_series, metadata,
     if not np.issubdtype(otu_table.dtypes.values[0], np.number):
         raise ValueError("OTU table must contain numeric values only.")
 
-    required_ranks = ["Phylum", "Class", "Order", "Family", "Genus", "Species"]
-    missing = [rank for rank in required_ranks if rank not in taxonomy_series.columns]  # noqa
-    if missing:
-        raise ValueError(f"Taxonomy table is missing required taxonomic ranks: {', '.join(missing)}")  # noqa
+    # required_ranks = ["Phylum", "Class", "Order", "Family", "Genus", "Species"]
+    # missing = [rank for rank in required_ranks if rank not in taxonomy_series.index]  # noqa
+    # if missing:
+    #     raise ValueError(f"Taxonomy table is missing required taxonomic ranks: {', '.join(missing)}")  # noqa
 
     ######
 
@@ -76,6 +76,7 @@ def barplot_taxa_facet_fill(otu_table, taxonomy_series, metadata,
     # Colors: ensure enough for all taxa
     # Use 'tab20' (colorblind-safe alternative: 'colorblind')
     color_palette = sns.color_palette("tab20", n_colors=len(taxa_order))
+    print(pivot_df)
     genus_sums = pivot_df[taxa_order].sum(axis=0)
     most_abundant_genus = genus_sums.idxmax()
 
