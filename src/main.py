@@ -244,3 +244,8 @@ barplot_taxa_facet_fill(otu_table=otu_patient,
                         fig_width=12,
                         height_per_condition=10,
                         out_file=f"{OUTDIR}/top10_taxa_patient.png")
+
+print('===============================')
+print('BioTrack analysis is complete!')
+print(f'Results are located in /{OUTDIR}')
+print('===============================')
