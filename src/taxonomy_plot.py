@@ -69,7 +69,6 @@ def barplot_taxa_facet_fill(otu_table, taxonomy_series, metadata,
     # Colors: ensure enough for all taxa
     # Use 'tab20' (colorblind-safe alternative: 'colorblind')
     color_palette = sns.color_palette("tab20", n_colors=len(taxa_order))
-    print(pivot_df)
     genus_sums = pivot_df[taxa_order].sum(axis=0)
     most_abundant_genus = genus_sums.idxmax()
 

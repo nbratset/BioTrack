@@ -29,6 +29,8 @@ def main():
 
     args = parser.parse_args()
 
+    print('Starting analysis...')
+    
     # Load data
     try:
         otu = pd.read_csv(args.otu_file, index_col=0)
