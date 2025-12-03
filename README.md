@@ -185,6 +185,11 @@ install.packages("dplyr")
 install.packages("openxlsx")
 ```
 
+If phyloseq has an installation error, try the following instead:
+
+```R
+BiocManager::install("phyloseq")
+```
 
 ## Analysis Python Environment Setup
 ### 1. Install [micromamba](https://mamba.readthedocs.io/en/latest/installation/micromamba-installation.html)
