@@ -40,7 +40,7 @@ Download a ZIP of the full repository:
 ## Step 1: Nextflow Pipeline for Patient Sample Alignment
 This first step is to take the gut microbiome patient samples and align them. This pipeline will generate a metaphlan output, which is used in later analysis.
 
-1. See `Nextflow Alignment Pipeline Python Environment Setup` below to set up your python virtual environment to run this pipeline.
+1. See [`Nextflow Alignment Pipeline Python Environment Setup`](https://github.com/nbratset/BioTrack?tab=readme-ov-file#nextflow-alignment-pipeline-python-environment-setup) below to set up your python virtual environment to run this pipeline.
 
 2. Once your micromamba environment it set up, download your patient data and set up your database.csv and samplesheet.csv files (found in [input_nextflow](https://github.com/nbratset/BioTrack/tree/main/input_nextflow)).
 
@@ -79,7 +79,7 @@ This first step is to take the gut microbiome patient samples and align them. Th
 4. If this runs properly, you should get a metaplan output that will be used in the next step.
 
 ## Step 2: Create a Phyloseq object from Metaplan Results
-1. Download R and set up the packages in `R Setup for Phyloseq` below to run this R pipeline.
+1. Download R and set up the packages in [`R Setup for Phyloseq`](https://github.com/nbratset/BioTrack?tab=readme-ov-file#r-setup-for-phyloseq) below to run this R pipeline.
 
 2. From your base directory, move your metaplan output files into a directory called `input_data`.
 
@@ -101,7 +101,7 @@ This first step is to take the gut microbiome patient samples and align them. Th
 5. This creates 3 outputs: merged otu table (abundances of each taxa), merged taxonomy table (phylogeny of each taxa), and merged metadata (`combined_metadata.csv`).
 
 ## Step 3: Microbiome Analysis
-1. See `Analysis Python Environment Setup` below to set up your python virtual environment to run this analysis.
+1. See [`Analysis Python Environment Setup`](https://github.com/nbratset/BioTrack?tab=readme-ov-file#analysis-python-environment-setup) below to set up your python virtual environment to run this analysis.
 
 2. Provide your output from the R script as input arguments to the analysis pipeline.
 
@@ -119,7 +119,7 @@ This first step is to take the gut microbiome patient samples and align them. Th
 4. This will generate a handful of csv, png, and txt files in a folder called `results`.
 
 ## Step 4: Generate an Interactive Report
-1. See `Report Generation Python Environment Setup` below to set up your python virtual environment to run this analysis.
+1. See [`Report Generation Python Environment Setup`](https://github.com/nbratset/BioTrack?tab=readme-ov-file#report-generation-python-environment-setup) below to set up your python virtual environment to run this analysis.
     - Unfortunately, scikit-bio requires a downgraded version of numpy that is not compatible with plotly/dash. Therefore this script has to run on a sepparate virtual environment.
 
 2. Provide your outputs from the analysis script above as input arguments to the analysis pipeline. If your directory structure is the same as this repo, the default arguments will work.
