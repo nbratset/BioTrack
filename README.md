@@ -266,7 +266,7 @@ Note: I have had installation errors with `micromamba install dash_bootstrap_com
 # Release History
 * 1.0.0
     * The first proper release
-    * 12/02/2025
+    * 12/04/2025
 * 0.0.1
     * Work in progress
 
