@@ -13,22 +13,26 @@ def parse_csvs(taxa_otu_file, alpha_div_file, beta_pcoa_file, diff_file):
         taxa_otu_df = pd.read_csv(taxa_otu_file, index_col=0)
     except FileNotFoundError:
         print('Missing Taxa/OTU File')
-        sys.exit(0)
+        return 'Missing Taxa/OTU File'
+        # sys.exit(0)
     try:
         alpha_div_df = pd.read_csv(alpha_div_file, index_col=0)
     except FileNotFoundError:
         print('Missing alpha diversity File')
-        sys.exit(0)
+        return 'Missing alpha diversity File'
+        # sys.exit(0)
     try:
         beta_pcoa_df = pd.read_csv(beta_pcoa_file, index_col=0)
     except FileNotFoundError:
         print('Missing beta diversity File')
-        sys.exit(0)
+        return 'Missing beta diversity File'
+        # sys.exit(0)
     try:
         diff_df = pd.read_csv(diff_file, index_col=0)
     except FileNotFoundError:
         print('Missing Differential Abundance File')
-        sys.exit(0)
+        return 'Missing Differential Abundance File'
+        # sys.exit(0)
     return taxa_otu_df, alpha_div_df, beta_pcoa_df, diff_df
 
 
