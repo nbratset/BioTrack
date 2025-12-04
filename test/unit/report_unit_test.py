@@ -47,7 +47,7 @@ class TestReport(unittest.TestCase):
 
     def test_parse_rf(self):
         self.assertEqual(app.parse_rf_export('results/rf_report.txt'),
-                         'Healthy Control')
+                         'Healthy control')
 
     def test_parse_rf_errors(self):
         self.assertEqual(app.parse_rf_export('bad.txt'),
