@@ -43,7 +43,8 @@ def parse_rf_export(rf_file):
         file = open(rf_file, 'r', encoding='utf-8')
     except FileNotFoundError:
         print('Cannot find RF_report File!')
-        sys.exit(0)
+        return 'Cannot find RF_report File!'
+        # sys.exit(0)
     for line in file:
         line_list.append(line)
         split = line.strip().split("'")
@@ -60,10 +61,12 @@ def get_patient(df):
     patient = df[df["Condition"] == 'Patient'].index.to_list()
     if len(patient) > 1:
         print('Check metadata file, multiple patients were found!')
-        sys.exit(0)
+        return 'Check metadata file, multiple patients were found!'
+        # sys.exit(0)
     elif len(patient) == 0:
         print('Check metadata file, no patients found!')
-        sys.exit(0)
+        return 'Check metadata file, no patients found!'
+        # sys.exit(0)
     elif len(patient) == 1:
         return patient[0]
 
