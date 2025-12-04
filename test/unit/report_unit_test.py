@@ -52,3 +52,7 @@ class TestReport(unittest.TestCase):
     def test_parse_rf_errors(self):
         self.assertEqual(app.parse_rf_export('bad.txt'),
                          'Cannot find RF_report File!')
+
+
+if __name__ == '__main__':
+    unittest.main()
